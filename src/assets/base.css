@@ -4,7 +4,7 @@
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
 
-  --vt-c-black: #181818;
+  --vt-c-black: #252525;
   --vt-c-black-soft: #222222;
   --vt-c-black-mute: #282828;
 
@@ -12,13 +12,13 @@
 
   --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
   --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+  --vt-c-divider-dark-1: rgba(81, 179, 154, 0.65);
+  --vt-c-divider-dark-2: rgba(81, 179, 154, 0.48);
 
   --vt-c-text-light-1: var(--vt-c-indigo);
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  --vt-c-text-dark-1: #51B39A;
+  --vt-c-text-dark-2: rgba(81 179 154, 0.64);
 }
 
 /* semantic color variables for this project */
@@ -66,7 +66,7 @@ body {
     color 0.5s,
     background-color 0.5s;
   line-height: 1.6;
-  font-family:
+  /* font-family:
     Inter,
     -apple-system,
     BlinkMacSystemFont,
@@ -78,8 +78,9 @@ body {
     'Fira Sans',
     'Droid Sans',
     'Helvetica Neue',
-    sans-serif;
-  font-size: 15px;
+    sans-serif; */
+  font-family: 'Dosis, sans-serif';
+    font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
