@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Signup from "./auth/components/Signup.vue";
+  import Auth from "./auth/components/Auth.vue";
 </script>
 
 <template>
 
-  <Signup/>
+  <Auth/>
 
 </template>
 

@@ -1,9 +1,3 @@
-<!-- <script setup lang="ts">
-  defineProps<{
-    msg: string;
-  }>();
-</script> -->
-
 <script setup lang="ts">
 import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from 'radix-vue'
 </script>
