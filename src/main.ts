@@ -1,11 +1,22 @@
-import './assets/main.css'
+import "./assets/main.css";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import App from './App.vue'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import { createRouter, createWebHistory } from "vue-router";
 
-const app = createApp(App)
+import App from "./App.vue";
+import Auth from "./views/Auth.vue";
 
-app.use(createPinia())
+const routes = [{ path: "/auth", component: Auth }];
 
-app.mount('#app')
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+const app = createApp(App);
+
+app.use(router);
+app.use(createPinia());
+
+app.mount("#app");

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Auth from "./auth/components/Auth.vue";
+  import Auth from "./views/Auth.vue";
 </script>
 
 <template>
 
-  <Auth/>
+  <RouterView />
 
 </template>
 
