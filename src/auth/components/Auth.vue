@@ -35,7 +35,7 @@ import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from 'rad
       value="tab1"
     >
       <p class="tabsText">
-        Logga in
+        Logga in på ditt konto
       </p>
       <fieldset class="tabsFieldset">
         <label
@@ -70,7 +70,7 @@ import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from 'rad
       value="tab2"
     >
       <p class="tabsText">
-        Skapa konto
+        Skapa ett nytt konto
       </p>
       <fieldset class="tabsFieldset">
         <label
@@ -202,13 +202,12 @@ import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from 'rad
     font-weight: 800;
   }
   .tabsInput {
-    color: var(--color-heading);
+    color: black;
     flex: 1 0 auto;
     border-radius: 0.5rem;
     padding: 0 10px;
     font-size: 15px;
     line-height: 1;
-    color: var(--color-heading);
     box-shadow: 0 0 0 1px var(--color-heading);
     height: 35px;
     outline: none;
@@ -246,7 +245,6 @@ import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from 'rad
   @media (min-width: 1024px) {
     .tabsRoot {
       max-width: 40vw;
-      min-height: ;
       background-color: var(--color-background-soft);
       margin: 10rem auto;
     }
