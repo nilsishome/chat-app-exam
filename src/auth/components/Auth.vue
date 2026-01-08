@@ -245,7 +245,6 @@ import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from 'rad
   @media (min-width: 1024px) {
     .tabsRoot {
       max-width: 40vw;
-      min-height: ;
       background-color: var(--color-background-soft);
       margin: 10rem auto;
     }
