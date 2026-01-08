@@ -6,8 +6,12 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import App from "./App.vue";
 import Auth from "./views/Auth.vue";
+import Chat from "./views/Chat.vue";
 
-const routes = [{ path: "/auth", component: Auth }];
+const routes = [
+  { path: "/auth", component: Auth },
+  { path: "/", component: Chat },
+];
 
 const router = createRouter({
   history: createWebHistory(),
