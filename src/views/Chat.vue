@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import User from "../chat/components/User.vue";
+import Chat from "../chat/components/Chat.vue";
+import User from "../chat/components/User.vue";
 </script>
 
 <template>
-  <User/>
+  <!-- <User /> -->
+  <Chat />
 </template>
