@@ -10,11 +10,12 @@ interface conversation {
   name: string;
   status: boolean;
   messages: message[];
+  image: string;
 }
 
 let messages = [
   {
-    sender: "Fredrik",
+    sender: "Fredrik Svensson",
     date: new Date("2026-01-08"),
     message: "Hej! Hur mår du idag?",
   },
@@ -24,7 +25,7 @@ let messages = [
     message: "Mycket bra tack! Hur mår du?",
   },
   {
-    sender: "Fredrik",
+    sender: "Fredrik Svensson",
     date: new Date("2026-01-08"),
     message: "Jättebra tack!",
   },
@@ -34,9 +35,29 @@ let testConversation = [
   {
     name: "Anton Eriksson",
     status: true,
-    image:
-      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740&q=80",
     messages: messages,
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1jfnUGTZv24EtkP2fDObJ8TQI90kP9kFadw&s",
+  },
+  {
+    name: "Lasse Eriksson",
+    status: false,
+    messages: messages,
+    image: "https://i.pinimg.com/736x/24/64/fb/2464fb46debaa81f4db72c7f89499124.jpg",
+  },
+  {
+    name: "Antonia Hermansson",
+    status: true,
+    messages: messages,
+    image:
+      "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?cs=srgb&dl=pexels-olly-774909.jpg&fm=jpg",
+  },
+  {
+    name: "Jesper Larsson",
+    status: false,
+    messages: messages,
+    image:
+      "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?cs=srgb&dl=pexels-creationhill-1681010.jpg&fm=jpg",
   },
 ];
 
