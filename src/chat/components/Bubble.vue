@@ -25,16 +25,16 @@ const MIN_PAD_H = 8;
 const MAX_PAD_H = 40;
 
 const MIN_WIDTH = 15;
-const MAX_WIDTH = 70;
+const MAX_WIDTH = 120;
 
 let ro: ResizeObserver | null = null;
 let mo: MutationObserver | null = null;
 
 function computeLayout() {
-  const text = messageRef.value;
-  if (!text) return;
+  const message = messageRef.value;
+  if (!message) return;
 
-  const style = getComputedStyle(text);
+  const style = getComputedStyle(message);
 
   let lineHeight = parseFloat(style.lineHeight);
   if (isNaN(lineHeight)) {
@@ -42,17 +42,14 @@ function computeLayout() {
     lineHeight = fontSize * 1.2;
   }
 
-  const scrollHeight = text.scrollHeight;
+  const scrollHeight = message.scrollHeight;
   const lines = Math.max(1, Math.round(scrollHeight / lineHeight));
 
   const clamped = Math.min(lines, MAX_LINES);
 
   padV.value = Math.round(Math.max(MIN_PAD_V, MAX_PAD_V + (clamped - 1) * 4));
-
   padH.value = Math.round(Math.max(MIN_PAD_H, MAX_PAD_H + (clamped - 1) * 7));
-
   radius.value = Math.round(Math.max(MIN_RADIUS, MAX_RADIUS * 7));
-
   width.value = Math.round(Math.max(MIN_WIDTH, MAX_WIDTH * 6));
 }
 
