@@ -4,7 +4,7 @@ import Bubble from "./Bubble.vue";
 
 <template>
   <main class="page">
-    <Bubble />
+    <Bubble text="Hello" />
   </main>
 </template>
 
@@ -12,7 +12,7 @@ import Bubble from "./Bubble.vue";
 .page {
   position: absolute;
   background-color: var(--vt-c-black-soft);
-  min-height: 100vh;
-  min-width: 100vw;
+  height: 100vh;
+  width: 100vw;
 }
 </style>
