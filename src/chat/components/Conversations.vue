@@ -7,7 +7,7 @@
 
 <template>
   <div class="conversationContainer">
-    <div v-for="(conversation, index) in conversationStore.conversations" :key="index" class="conversationDiv">
+    <div v-for="(conversation, index) in conversationStore.filteredConversations" :key="index" class="conversationDiv">
       <AvatarRoot class="conversationAvatarRoot">
         <a class="conversationNotifications">2</a>
         <a :class="conversation.status ? 'statusOn' : 'statusOff'" class="conversationStatus"></a>

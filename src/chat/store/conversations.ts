@@ -66,6 +66,17 @@ export const useConversationsStore = defineStore("conversations", {
     return {
       conversations: testConversation as conversation[],
       status: true as boolean,
+      searchQuery: "" as string,
     };
+  },
+
+  getters: {
+    filteredConversations(state) {
+      if (!state.searchQuery) return state.conversations;
+
+      return state.conversations.filter((conversation) =>
+        conversation.name.toLowerCase().includes(state.searchQuery.toLowerCase())
+      );
+    },
   },
 });
