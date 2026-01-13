@@ -10,9 +10,9 @@ import Chat from "./views/Chat.vue";
 import Settings from "./views/Settings.vue";
 
 const routes = [
+  { path: "/", component: Chat },
   { path: "/auth", component: Auth },
   { path: "/settings", component: Settings },
-  { path: "/", component: Chat },
 ];
 
 const router = createRouter({

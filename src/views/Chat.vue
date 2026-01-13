@@ -1,27 +1,29 @@
 <script setup lang="ts">
-  import User from "../chat/components/User.vue";
-  import Conversations from "@/chat/components/Conversations.vue";
-  import Search from "@/chat/components/Search.vue";
-  import CreateChat from "@/chat/components/CreateChat.vue";
+import User from "../chat/components/User.vue";
+import Conversations from "@/chat/components/Conversations.vue";
+import Search from "@/chat/components/Search.vue";
+import CreateChat from "@/chat/components/CreateChat.vue";
+import Chat from "../chat/components/Chat.vue";
 </script>
 
 <template>
   <div class="leftSection">
-    <User/>
-    <Search/>
-    <Conversations/>
-    <CreateChat/>
+    <User />
+    <Search />
+    <Conversations />
+    <CreateChat />
   </div>
+  <Chat />
 </template>
 
 <style scoped>
-  .leftSection {
-    background-color: var(--color-background);
-  }
+.leftSection {
+  background-color: var(--color-background);
+}
 
-  @media (min-width: 1024px) {
-    .leftSection {
-      width: 25%;
-    }
+@media (min-width: 1024px) {
+  .leftSection {
+    width: 25%;
   }
+}
 </style>
