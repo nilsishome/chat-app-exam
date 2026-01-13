@@ -28,5 +28,5 @@
 **Nils**:
 * Completed initial chat bubble styling for UI
 
-**Nils & Magnus**:
+**Magnus & Nils**:
 * Integrated chat bubble and chat view into conversation and user components
