@@ -4,13 +4,13 @@ import type { conversation } from "./conversations";
 export const useCurrentConversationStore = defineStore("conversation", {
   state: () => {
     return {
-      conversation: [] as conversation[],
+      conversation: {} as conversation,
       chatToggle: false as boolean,
     };
   },
 
   actions: {
-    async applyCurrentConversation(conversation: conversation[]) {
+    async applyCurrentConversation(conversation: conversation) {
       try {
         this.conversation = conversation;
         this.chatToggle = true;
@@ -20,7 +20,7 @@ export const useCurrentConversationStore = defineStore("conversation", {
     },
 
     resetCurrentConversation() {
-      this.conversation = [];
+      this.conversation = {} as conversation;
       this.chatToggle = false;
     },
   },
