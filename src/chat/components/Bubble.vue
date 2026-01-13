@@ -9,7 +9,7 @@ const props = defineProps({
 const bubbleRef = ref<HTMLElement | null>(null);
 const messageRef = ref<HTMLElement | null>(null);
 
-const screenWidth = screen.availWidth;
+const screenWidth = top?.innerWidth;
 
 let padV = ref(12);
 let padH = ref(16);
@@ -30,7 +30,7 @@ let MAX_PAD_H = 40;
 let MIN_WIDTH = 15;
 let MAX_WIDTH = 120;
 
-if (screenWidth && screenWidth <= 550) {
+if (screenWidth! <= 550) {
   padV = ref(6);
   padH = ref(8);
   radius = ref(16);
@@ -49,7 +49,7 @@ if (screenWidth && screenWidth <= 550) {
 
   MIN_WIDTH = 15;
   MAX_WIDTH = 40;
-} else if (screenWidth < 800) {
+} else if (screenWidth! < 1150) {
   width = ref(40);
   MIN_WIDTH = 15;
   MAX_WIDTH = 80;
@@ -193,7 +193,7 @@ onBeforeUnmount(() => {
   border-radius: var(--radius, 24px);
   width: var(--width);
   height: fit-content;
-  background-color: var(--vt-c-black);
+  background-color: var(--color-background);
   box-shadow: -3px 4px 4px rgba(81, 179, 154, 0.25);
   box-sizing: border-box;
   transition: paddings 160ms ease, border-radius 160ms ease;
@@ -206,7 +206,7 @@ onBeforeUnmount(() => {
 .message {
   margin: 0;
   font-size: 20px;
-  color: var(--vt-c-text-dark-1);
+  color: var(--color-heading);
   line-height: 1.25;
   text-align: start;
   white-space: pre-wrap;
