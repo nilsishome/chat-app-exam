@@ -10,7 +10,7 @@
       <AvatarRoot class="chatProfileAvatarRoot">
         <AvatarImage
           class="chatProfileAvatarImage"
-          src="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"
+          :src="userStore.image"
           alt="Colm Tuite"
         />
         <AvatarFallback
@@ -91,8 +91,8 @@
   }
 
   .chatProfileStatus {
-    width: 1.75vw;
-    height: 1vh;
+    width: 0.5rem;
+    height: 0.5rem;
     border-radius: 100%;
     background-color: grey;
     margin-top: auto;
@@ -114,17 +114,13 @@
   }
 
   @media (min-width: 1024px) {
-    .chatProfileContainer {
-      width: 25%;
-    }
-
     .chatProfileDiv {
       margin-bottom: 2.5rem;
     }
 
     .chatProfileStatus {
-      width: 0.325vw;
-      height: 0.75vh;
+      width: 1rem;
+      height: 1rem;
     }
 
     .chatProfileName {
