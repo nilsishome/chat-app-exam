@@ -9,24 +9,51 @@ const props = defineProps({
 const bubbleRef = ref<HTMLElement | null>(null);
 const messageRef = ref<HTMLElement | null>(null);
 
-const padV = ref(12);
-const padH = ref(16);
-const radius = ref(24);
-const width = ref(50);
+const screenWidth = screen.availWidth;
 
-const MAX_LINES = 8;
+let padV = ref(12);
+let padH = ref(16);
+let radius = ref(24);
+let width = ref(50);
 
-const MIN_RADIUS = 8;
-const MAX_RADIUS = 28;
+let MAX_LINES = 8;
 
-const MIN_PAD_V = 6;
-const MAX_PAD_V = 18;
+let MIN_RADIUS = 8;
+let MAX_RADIUS = 28;
 
-const MIN_PAD_H = 8;
-const MAX_PAD_H = 40;
+let MIN_PAD_V = 6;
+let MAX_PAD_V = 18;
 
-const MIN_WIDTH = 15;
-const MAX_WIDTH = 120;
+let MIN_PAD_H = 8;
+let MAX_PAD_H = 40;
+
+let MIN_WIDTH = 15;
+let MAX_WIDTH = 120;
+
+if (screenWidth && screenWidth <= 550) {
+  padV = ref(6);
+  padH = ref(8);
+  radius = ref(16);
+  width = ref(30);
+
+  MAX_LINES = 0;
+
+  MIN_RADIUS = 8;
+  MAX_RADIUS = 28;
+
+  MIN_PAD_V = 6;
+  MAX_PAD_V = 18;
+
+  MIN_PAD_H = 8;
+  MAX_PAD_H = 40;
+
+  MIN_WIDTH = 15;
+  MAX_WIDTH = 40;
+} else if (screenWidth < 800) {
+  width = ref(40);
+  MIN_WIDTH = 15;
+  MAX_WIDTH = 80;
+}
 
 let ro: ResizeObserver | null = null;
 let mo: MutationObserver | null = null;
@@ -154,9 +181,13 @@ onBeforeUnmount(() => {
   box-shadow: 3px 4px 4px rgba(81, 179, 154, 0.25);
   margin-left: 0;
   margin-right: 4rem;
+
+  animation-name: user-ani;
+  animation-duration: 1000ms;
 }
 
 .bubble {
+  position: relative;
   margin-left: 4rem;
   padding: var(--pad-v, 12px) var(--pad-h, 16px);
   border-radius: var(--radius, 24px);
@@ -167,6 +198,9 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
   transition: paddings 160ms ease, border-radius 160ms ease;
   max-width: fit-content;
+
+  animation-name: contact-ani;
+  animation-duration: 1000ms;
 }
 
 .message {
@@ -176,7 +210,7 @@ onBeforeUnmount(() => {
   line-height: 1.25;
   text-align: start;
   white-space: pre-wrap;
-  word-break: break-word;
+  word-wrap: break-word;
 }
 
 .AvatarRoot {
@@ -191,10 +225,16 @@ onBeforeUnmount(() => {
   height: 50px;
   border-radius: 100%;
   background-color: var(--color-background-soft);
+
+  animation-name: contact-ani;
+  animation-duration: 1250ms;
 }
 
 .user > .AvatarRoot {
   right: 0;
+
+  animation-name: user-ani;
+  animation-duration: 1250ms;
 }
 
 .AvatarImage {
@@ -215,5 +255,66 @@ onBeforeUnmount(() => {
   font-size: 15px;
   line-height: 1;
   font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .wrapper {
+    margin: 1rem 0.5rem 3rem 0.5rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .bubble {
+    padding: var(--pad-v, 6px) var(--pad-h, 16px);
+    border-radius: var(--radius, 24px);
+    width: var(--width);
+  }
+}
+
+@media (max-width: 700px) {
+  .bubble {
+    margin-left: 2.5rem;
+  }
+
+  .message {
+    font-size: 16px;
+  }
+
+  .user > .bubble {
+    margin-right: 2.5rem;
+  }
+
+  .AvatarRoot {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@keyframes contact-ani {
+  0% {
+    transform: translateY(-500px);
+  }
+
+  50% {
+    transform: translateY(15px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes user-ani {
+  0% {
+    transform: translateY(500px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 </style>
