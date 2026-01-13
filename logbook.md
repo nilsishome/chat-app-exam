@@ -22,3 +22,11 @@
 
 **Nils**:
 * Continued with the styling of the chat bubble UI
+
+# 2026/01/13
+
+**Nils**:
+* Completed initial chat bubble styling for UI
+
+**Nils & Magnus**:
+* Integrated chat bubble and chat view into conversation and user components
