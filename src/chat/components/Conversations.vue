@@ -1,8 +1,15 @@
 <script setup lang="ts">
   import { AvatarRoot, AvatarFallback, AvatarImage } from 'radix-vue';
   import { useConversationsStore } from '../store/conversations';
+  import { useCurrentConversationStore } from '../store/currentConversation';
+  import type { conversation } from '../store/conversations';
 
   const conversationStore = useConversationsStore();
+  const currentConversationStore = useCurrentConversationStore();
+
+  const setCurrentConversation = (conversation: conversation[]): void => {
+    currentConversationStore.applyCurrentConversation(conversation)
+  }
 </script>
 
 <template>
@@ -24,7 +31,7 @@
         </AvatarFallback>
       </AvatarRoot>
       <p class="conversationName">{{ conversation.name }}</p>
-      <i class="conversationIcon pi pi-sign-in" style="margin-top: auto; margin-bottom: auto;"></i>
+      <i v-on:click="setCurrentConversation([conversation])" class="conversationIcon pi pi-sign-in" style="margin-top: auto; margin-bottom: auto;"></i>
     </div>
   </div>
 </template>
