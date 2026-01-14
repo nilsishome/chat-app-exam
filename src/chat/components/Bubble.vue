@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch, nextTick, type PropType } from "vue";
 import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
+import { storeToRefs } from "pinia";
+import { useCurrentConversationStore } from "../store/currentConversation";
+import { useUserStore } from '../store/user';
+import type { message } from "../store/conversations";
+
+const userStore = useUserStore();
+const currentStore = useCurrentConversationStore();
+const { conversation } = storeToRefs(currentStore);
 
 const props = defineProps({
-  text: { type: String, required: true },
+  id: { type: Number as PropType<number>, required: true},
+  msg: { type: Object as PropType<message>, required: true},
 });
 
 const bubbleRef = ref<HTMLElement | null>(null);
 const messageRef = ref<HTMLElement | null>(null);
 
-const screenWidth = screen.availWidth;
+const screenWidth = top?.innerWidth;
 
 let padV = ref(12);
 let padH = ref(16);
@@ -30,7 +39,7 @@ let MAX_PAD_H = 40;
 let MIN_WIDTH = 15;
 let MAX_WIDTH = 120;
 
-if (screenWidth && screenWidth <= 550) {
+if (screenWidth! <= 550) {
   padV = ref(6);
   padH = ref(8);
   radius = ref(16);
@@ -49,7 +58,7 @@ if (screenWidth && screenWidth <= 550) {
 
   MIN_WIDTH = 15;
   MAX_WIDTH = 40;
-} else if (screenWidth < 800) {
+} else if (screenWidth! < 1150) {
   width = ref(40);
   MIN_WIDTH = 15;
   MAX_WIDTH = 80;
@@ -103,7 +112,7 @@ onMounted(() => {
   }
 
   watch(
-    () => props.text,
+    () => props.msg.message,
     () => {
       nextTick().then(computeLayout);
     }
@@ -117,14 +126,17 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="wrapper contact">
+  <div 
+    class="wrapper"
+    :class="$props.msg.sender == userStore.id ? 'contact' : 'user'"
+  >
     <AvatarRoot class="AvatarRoot">
       <AvatarImage
         class="AvatarImage"
-        src="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"
-        alt="Erik Svensson"
+        :src="$props.msg.sender == userStore.id ? userStore.image : conversation.image"
+        alt="avatar image"
       />
-      <AvatarFallback class="AvatarFallback" :delay-ms="600">ES</AvatarFallback>
+      <AvatarFallback class="AvatarFallback" :delay-ms="600">{{ conversation.name[0] }} {{ conversation.name[1] }}</AvatarFallback>
     </AvatarRoot>
     <div
       ref="bubbleRef"
@@ -136,32 +148,7 @@ onBeforeUnmount(() => {
         '--width': width + 'px',
       }"
     >
-      <p ref="messageRef" class="message">Hejsan Världen!</p>
-    </div>
-  </div>
-
-  <div class="wrapper user">
-    <AvatarRoot class="AvatarRoot">
-      <AvatarImage
-        class="AvatarImage"
-        src="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"
-        alt="Erik Svensson"
-      />
-      <AvatarFallback class="AvatarFallback" :delay-ms="600">ES</AvatarFallback>
-    </AvatarRoot>
-    <div
-      ref="bubbleRef"
-      class="bubble"
-      :style="{
-        '--pad-v': padV + 'px',
-        '--pad-h': padH + 'px',
-        '--radius': radius + 'px',
-        '--width': width + 'px',
-      }"
-    >
-      <p ref="messageRef" class="message">
-        Jag är inte världen din schomme! Vem tror du att du är? Kom då, kom då! Va lång bubblan är
-      </p>
+      <p ref="messageRef" class="message">{{ $props.msg.message }}</p>
     </div>
   </div>
 </template>
@@ -179,8 +166,10 @@ onBeforeUnmount(() => {
 
 .user > .bubble {
   box-shadow: 3px 4px 4px rgba(81, 179, 154, 0.25);
-  margin-left: 0;
+  margin-left: auto;
   margin-right: 4rem;
+
+  justify-content: end;
 
   animation-name: user-ani;
   animation-duration: 1000ms;
@@ -193,7 +182,7 @@ onBeforeUnmount(() => {
   border-radius: var(--radius, 24px);
   width: var(--width);
   height: fit-content;
-  background-color: var(--vt-c-black);
+  background-color: var(--color-background);
   box-shadow: -3px 4px 4px rgba(81, 179, 154, 0.25);
   box-sizing: border-box;
   transition: paddings 160ms ease, border-radius 160ms ease;
@@ -206,7 +195,7 @@ onBeforeUnmount(() => {
 .message {
   margin: 0;
   font-size: 20px;
-  color: var(--vt-c-text-dark-1);
+  color: var(--color-heading);
   line-height: 1.25;
   text-align: start;
   white-space: pre-wrap;
