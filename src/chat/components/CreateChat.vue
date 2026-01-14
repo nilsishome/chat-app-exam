@@ -152,7 +152,7 @@
 
   @media (min-width: 1024px) {
     .createChatButton {
-      width: 25%;
+      width: 50%;
     }
   }
 </style>
