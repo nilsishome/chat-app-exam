@@ -12,10 +12,10 @@ const { conversation } = storeToRefs(currentStore);
     <h1>{{ conversation.name }}</h1>
     <!-- <Bubble text="Hello" /> -->
     <Bubble
-      v-for="msg in conversation.messages"
-      :key="msg.sender"
-      :id="msg.sender"
-      :message="msg"
+      v-for="messageData in conversation.messages"
+      :key="messageData.sender"
+      :id="messageData.sender"
+      :msg="messageData"
     />
   </div>
   <div v-else class="errorMessage">

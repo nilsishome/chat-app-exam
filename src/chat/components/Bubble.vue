@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch, nextTick, type PropType } from "vue";
 import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
 import { storeToRefs } from "pinia";
 import { useCurrentConversationStore } from "../store/currentConversation";
@@ -11,8 +11,8 @@ const currentStore = useCurrentConversationStore();
 const { conversation } = storeToRefs(currentStore);
 
 const props = defineProps({
-  id: { type: Number, required: true},
-  message: { type: {} as message, required: true},
+  id: { type: Number as PropType<number>, required: true},
+  msg: { type: Object as PropType<message>, required: true},
 });
 
 const bubbleRef = ref<HTMLElement | null>(null);
@@ -112,7 +112,7 @@ onMounted(() => {
   }
 
   watch(
-    () => props.text,
+    () => props.msg.message,
     () => {
       nextTick().then(computeLayout);
     }
@@ -128,12 +128,12 @@ onBeforeUnmount(() => {
 <template>
   <div 
     class="wrapper"
-    :class="$props.message.sender == userStore.id ? 'contact' : 'user'"
+    :class="$props.msg.sender == userStore.id ? 'contact' : 'user'"
   >
     <AvatarRoot class="AvatarRoot">
       <AvatarImage
         class="AvatarImage"
-        :src="$props.message.sender == userStore.id ? userStore.image : conversation.image"
+        :src="$props.msg.sender == userStore.id ? userStore.image : conversation.image"
         alt="avatar image"
       />
       <AvatarFallback class="AvatarFallback" :delay-ms="600">{{ conversation.name[0] }} {{ conversation.name[1] }}</AvatarFallback>
@@ -148,7 +148,7 @@ onBeforeUnmount(() => {
         '--width': width + 'px',
       }"
     >
-      <p ref="messageRef" class="message">{{ $props.message.message }}</p>
+      <p ref="messageRef" class="message">{{ $props.msg.message }}</p>
     </div>
   </div>
 </template>
