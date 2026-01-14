@@ -8,9 +8,15 @@ const { conversation } = storeToRefs(currentStore);
 </script>
 
 <template>
-  <div v-if="conversation.name">
+  <div class="chatWrapper" v-if="conversation.name">
     <h1>{{ conversation.name }}</h1>
-    <Bubble text="Hello" />
+    <!-- <Bubble text="Hello" /> -->
+    <Bubble
+      v-for="msg in conversation.messages"
+      :key="msg.sender"
+      :id="msg.sender"
+      :message="msg"
+    />
   </div>
   <div v-else class="errorMessage">
     <h2>Du är för närvarande inte i en chatt. Välj en chatt för att se meddelanden.</h2>
@@ -34,5 +40,10 @@ h1 {
 
 h2 {
   place-content: center;
+}
+
+.chatWrapper {
+  display: flex;
+  flex-direction: column;
 }
 </style>
