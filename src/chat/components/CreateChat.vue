@@ -66,7 +66,6 @@
     font-size: 1rem;
     margin-top: 2rem;
     cursor: pointer;
-
   }
 
   .addIcon {
