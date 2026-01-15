@@ -1,6 +1,8 @@
-import pool from "../db";
+import createPool from "../db";
 
 export async function run() {
+  const pool = createPool();
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,

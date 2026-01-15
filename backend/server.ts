@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from "express";
 import { Request, Response } from "express";
-import pool from "./db";
+import createPool from "./db";
 
 const app = express();
 export const port = process.env.PORT || 8080;
@@ -15,8 +15,13 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.get("/test-db", async (_, res) => {
+  const pool = createPool();
+  await pool.connect();
+
   const result = await pool.query("SELECT NOW()");
   res.json(result.rows[0]);
+
+  await pool.end();
 });
 
 app.listen(port, () => {
