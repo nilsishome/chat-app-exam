@@ -4,13 +4,25 @@ export async function run() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
-      name TEXT NOT NULL,
-      email TEXT UNIQUE NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      name VARCHAR NOT NULL,
+      email VARCHAR UNIQUE NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      password VARCHAR NOT NULL
     );
   `);
-  await pool.query(`INSERT INTO users (name, email) VALUES ($1, $2)`, ["Test", "test@example.com"]);
-  const res = await pool.query("SELECT * FROM users");
-  console.log(res.rows);
+
+  await pool.query(
+    `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING`,
+    ["Account1", "Account1@example.com", "123"]
+  );
+  await pool.query(
+    `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING`,
+    ["Account2", "Account2@example.com", "123"]
+  );
+  await pool.query(
+    `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING`,
+    ["Account3", "Account3@example.com", "123"]
+  );
+
   await pool.end();
 }
