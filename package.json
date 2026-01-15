@@ -16,9 +16,11 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
+    "docker:up": "docker compose -f backend/docker-compose.yml up -d",
+    "dev:server": "nodemon --exec tsx backend/server.ts",
     "dev:frontend": "vite",
-    "dev:backend": "nodemon --exec tsx backend/server.ts",
-    "dev": "run-p run:vite run:express"
+    "dev:backend": "run-s docker:up dev:server",
+    "dev": "run-p dev:frontend dev:backend"
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
