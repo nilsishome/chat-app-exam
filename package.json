@@ -22,7 +22,9 @@
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
+    "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "pg": "^8.16.3",
     "pinia": "^3.0.4",
     "primeicons": "^7.0.0",
     "radix-vue": "^1.9.17",
