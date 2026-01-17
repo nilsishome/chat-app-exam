@@ -4,9 +4,9 @@ dotenv.config();
 import express from "express";
 import { Request, Response } from "express";
 import createPool from "./db";
+import { port } from "./config";
 
 const app = express();
-export const port = process.env.PORT || 8080;
 
 app.use(express.json());
 
