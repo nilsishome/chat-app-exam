@@ -1,5 +1,5 @@
 import type { Ref } from "vue";
-import type { credentials } from "../types";
+import type { credentials } from "@/types";
 
 export const signUpData = async (credentials: credentials) => {
   try {
