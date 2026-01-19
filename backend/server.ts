@@ -2,17 +2,14 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import { Request, Response } from "express";
 import createPool from "./db";
 import { port } from "./config";
+import authRouter from "./routes/auth";
 
 const app = express();
 
 app.use(express.json());
-
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).send("Hello, World!");
-});
+app.use("/api/auth", authRouter);
 
 app.get("/test-db", async (_, res) => {
   const pool = createPool();
