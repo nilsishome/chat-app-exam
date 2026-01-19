@@ -35,8 +35,11 @@ export const validateSignIn = async (credentials: credentialsSignIn) => {
   if (rows.length === 0) {
     console.error("error: Finns ingen matchning på användare i DB!");
     return {
-      email: "E-postadressen är inte registrerad",
-      password: "",
+      ok: false,
+      error: {
+        email: "E-postadressen är inte registrerad",
+        password: "",
+      },
     };
   }
 
@@ -47,12 +50,15 @@ export const validateSignIn = async (credentials: credentialsSignIn) => {
   if (!isValid) {
     console.error("error: Inkorrekt lösenord för användare!");
     return {
-      email: "",
-      password: "Lösenordet är inkorrekt",
+      ok: false,
+      error: {
+        email: "",
+        password: "Lösenordet är inkorrekt",
+      },
     };
   }
 
-  return user;
+  return { ok: true };
 };
 
 export const validateSignUp = (credentials: credentialsSignUp) => {
