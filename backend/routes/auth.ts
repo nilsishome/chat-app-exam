@@ -1,22 +1,24 @@
 import express from "express";
 import type { Request, Response } from "express";
-import type { credentials } from "../types";
+import { hashPass, signUpDataToDb, validate } from "../sql/auth-db";
 
 const authRouter = express.Router();
 
-authRouter.post("/sign-up", (req: Request, res: Response) => {
-  const { email, username, password }: credentials = req.body;
+authRouter.post("/sign-up", async (req: Request, res: Response) => {
+  const { credentials } = req.body;
 
-  const credentials = {
-    email,
-    username,
-    password,
-  };
+  if (validate(credentials)) {
+    credentials.password = await hashPass(credentials.password);
 
-  res.json({
-    data: {
-      credentials,
-    },
+    await signUpDataToDb(credentials);
+
+    res.status(201).json({
+      message: "New user created!",
+    });
+    return;
+  }
+  res.status(400).json({
+    error: "Invalid credentials!",
   });
 });
 

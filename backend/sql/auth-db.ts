@@ -1,4 +1,4 @@
-import type { Ref } from "vue";
+import bcrypt from "bcrypt";
 import createPool from "../db";
 import type { credentials } from "../types";
 
@@ -29,28 +29,35 @@ export const validate = (credentials: credentials) => {
   const isValidEmail: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   if (!credentials.email) {
-    console.error("E-post krävs");
+    console.error("error: E-post krävs");
     valid = false;
   } else if (!isValidEmail.test(credentials.email)) {
-    console.error("Ogiltig e-postadress");
+    console.error("error: Ogiltig e-postadress");
     valid = false;
   }
 
   if (!credentials.username) {
-    console.error("Användarnamn krävs");
+    console.error("error: Användarnamn krävs");
     valid = false;
   } else if (credentials.username.length < 2) {
-    console.error("Minst 2 tecken");
+    console.error("error: Minst 2 tecken");
     valid = false;
   }
 
   if (!credentials.password) {
-    console.error("Lösenord krävs");
+    console.error("error: Lösenord krävs");
     valid = false;
   } else if (credentials.password.length < 6) {
-    console.error("Minst 6 tecken");
+    console.error("error: Minst 6 tecken");
     valid = false;
   }
 
   return valid;
+};
+
+export const hashPass = async (pass: string): Promise<string> => {
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hash = await bcrypt.hash(pass, salt);
+  return hash;
 };
