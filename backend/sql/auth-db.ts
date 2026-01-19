@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import createPool from "../db";
-import type { credentials } from "../types";
+import type { credentialsSignUp, credentialsSignIn } from "../types";
 
-export async function signUpDataToDb(credentials: credentials) {
+export const signUpDataToDb = async (credentials: credentialsSignUp) => {
   const pool = createPool();
 
   await pool.query(`
@@ -21,9 +21,41 @@ export async function signUpDataToDb(credentials: credentials) {
   );
 
   await pool.end();
-}
+};
 
-export const validate = (credentials: credentials) => {
+export const validateSignIn = async (credentials: credentialsSignIn) => {
+  const pool = createPool();
+
+  const { rows } = await pool.query(`SELECT email, password FROM users WHERE email = $1`, [
+    credentials.email,
+  ]);
+
+  await pool.end();
+
+  if (rows.length === 0) {
+    console.error("error: Finns ingen matchning på användare i DB!");
+    return {
+      email: "E-postadressen är inte registrerad",
+      password: "",
+    };
+  }
+
+  const user: credentialsSignIn = rows[0];
+
+  const isValid = await bcrypt.compare(credentials.password, user.password);
+
+  if (!isValid) {
+    console.error("error: Inkorrekt lösenord för användare!");
+    return {
+      email: "",
+      password: "Lösenordet är inkorrekt",
+    };
+  }
+
+  return user;
+};
+
+export const validateSignUp = (credentials: credentialsSignUp) => {
   let valid: boolean = true;
 
   const isValidEmail: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
