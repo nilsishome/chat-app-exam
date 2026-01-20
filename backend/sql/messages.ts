@@ -2,11 +2,40 @@ import createPool from "../db";
 import { getConversation } from "./createChat";
 
 export const sendMessage = async (userId: number, senderId: number, message: string) => {
-  // const pool = createPool();
   const conversation = await getConversation(userId, senderId);
 
   let currentMessages = conversation[0].messages;
+  let newMessage = {
+    sender: userId,
+    message: message,
+    date: new Date(),
+  };
 
-  if (currentMessages.length == 0) {
+  currentMessages.push(newMessage);
+
+  const result = saveMessagesToDb(currentMessages, conversation[0].conversationid);
+};
+
+export const saveMessagesToDb = async (messages, conversationId) => {
+  const pool = createPool();
+
+  const result = await pool.query(
+    `
+      UPDATE
+        conversations
+      SET
+        "messages" = $1
+      WHERE 
+        "conversationid" = $2
+    `,
+    [JSON.stringify(messages), conversationId],
+  );
+
+  pool.end();
+
+  if (result.rowCount > 0) {
+    return true;
+  } else {
+    return false;
   }
 };
