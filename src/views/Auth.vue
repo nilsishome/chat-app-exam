@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from "radix-vue";
 import {
   postSignUpData,
@@ -7,6 +8,8 @@ import {
   validateSignUp,
   validateSignIn,
 } from "./services/authService";
+
+const router = useRouter();
 
 const emailSignUp = ref("");
 const usernameSignUp = ref("");
@@ -53,6 +56,9 @@ const signInHandler = async () => {
       errorsSignIn.value = response.error;
       return;
     }
+    // Successful login
+    localStorage.setItem("token", response.token);
+    router.push("/");
   } catch (err) {
     console.error("Inloggningen misslyckades: ", err);
   }
