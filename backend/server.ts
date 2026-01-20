@@ -41,8 +41,8 @@ app.listen(port, () => {
 
 // import { sendMessage } from "./sql/messages.ts";
 
-// sendMessage(1, 2, "Hej hoppas du mår bra idag!");
+// sendMessage(2, 1, "Hej hoppas du mår bra idag!");
 
-import { createConversationDb } from "./sql/createChat";
+// import { createConversationDb } from "./sql/createChat";
 
-createConversationDb();
+// createConversationDb();
