@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import createPool from "../db";
-import type { credentials } from "../types";
+import type { credentialsSignUp, credentialsSignIn, credentialsFromDB } from "../types";
 
-export async function signUpDataToDb(credentials: credentials) {
+export const signUpDataToDb = async (credentials: credentialsSignUp) => {
   const pool = createPool();
 
   await pool.query(`
@@ -21,9 +22,45 @@ export async function signUpDataToDb(credentials: credentials) {
   );
 
   await pool.end();
-}
+};
 
-export const validate = (credentials: credentials) => {
+export const validateSignInFromDb = async (credentials: credentialsSignIn) => {
+  const pool = createPool();
+
+  const { rows } = await pool.query(`SELECT * FROM users WHERE email = $1`, [credentials.email]);
+
+  await pool.end();
+
+  if (rows.length === 0) {
+    console.error("error: Finns ingen matchning på användare i DB!");
+    return {
+      ok: false,
+      error: {
+        email: "E-postadressen är inte registrerad",
+        password: "",
+      },
+    };
+  }
+
+  const user: credentialsFromDB = rows[0];
+
+  const isValid = await bcrypt.compare(credentials.password, user.password);
+
+  if (!isValid) {
+    console.error("error: Inkorrekt lösenord för användare!");
+    return {
+      ok: false,
+      error: {
+        email: "",
+        password: "Lösenordet är inkorrekt",
+      },
+    };
+  }
+
+  return { ok: true, user: { id: user.id, email: user.email, name: user.name } };
+};
+
+export const validateSignUpFromClient = (credentials: credentialsSignUp) => {
   let valid: boolean = true;
 
   const isValidEmail: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -60,4 +97,20 @@ export const hashPass = async (pass: string): Promise<string> => {
   const salt = await bcrypt.genSalt(saltRounds);
   const hash = await bcrypt.hash(pass, salt);
   return hash;
+};
+
+export const jwtToken = (id: number, email: string) => {
+  try {
+    return jwt.sign(
+      {
+        userId: id,
+        email: email,
+      },
+      String(process.env.JWT_SECRET),
+      { expiresIn: "1h" },
+    );
+  } catch (err) {
+    console.log(err);
+    return;
+  }
 };

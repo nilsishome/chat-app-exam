@@ -1,28 +1,67 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from "radix-vue";
-import { signUpData, validate } from "./services/authService";
+import {
+  postSignUpData,
+  postSignInData,
+  validateSignUp,
+  validateSignIn,
+} from "./services/authService";
+
+const router = useRouter();
 
 const emailSignUp = ref("");
 const usernameSignUp = ref("");
 const passwordSignUp = ref("");
+// ------- //
+const emailSignIn = ref("");
+const passwordSignIn = ref("");
 
-const errors = ref({
+const errorsSignUp = ref({
   email: "",
   username: "",
   password: "",
 });
 
+const errorsSignIn = ref({
+  email: "",
+  password: "",
+});
+
 const signUpHandler = () => {
-  const credentials = {
+  const credentialsSignUp = {
     email: emailSignUp.value,
     username: usernameSignUp.value,
     password: passwordSignUp.value,
   };
 
-  if (!validate(credentials, errors)) return;
+  if (!validateSignUp(credentialsSignUp, errorsSignUp)) return;
 
-  signUpData(credentials);
+  postSignUpData(credentialsSignUp);
+};
+
+const signInHandler = async () => {
+  const credentialsSignIn = {
+    email: emailSignIn.value,
+    password: passwordSignIn.value,
+  };
+
+  if (!validateSignIn(credentialsSignIn, errorsSignIn)) return;
+
+  try {
+    const response = await postSignInData(credentialsSignIn);
+
+    if (response.error) {
+      errorsSignIn.value = response.error;
+      return;
+    }
+    // Successful login
+    localStorage.setItem("token", response.token);
+    router.push("/");
+  } catch (err) {
+    console.error("Inloggningen misslyckades: ", err);
+  }
 };
 </script>
 
@@ -37,17 +76,21 @@ const signUpHandler = () => {
     </TabsList>
     <TabsContent class="tabsContent" value="tab1">
       <p class="tabsText">Logga in på ditt konto</p>
-      <fieldset class="tabsFieldset">
-        <label class="tabsLabel" for="name"> E-Mail </label>
-        <input id="loginEmail" class="tabsInput" />
-      </fieldset>
-      <fieldset class="tabsFieldset">
-        <label class="tabsLabel" for="username"> Lösenord </label>
-        <input id="loginPassword" class="tabsInput" />
-      </fieldset>
-      <div :style="{ display: 'flex', marginTop: 20, justifyContent: 'flex-end' }">
-        <button class="tabsButton">Logga in</button>
-      </div>
+      <form @submit.prevent="signInHandler">
+        <fieldset class="tabsFieldset">
+          <label class="tabsLabel" for="name"> E-Mail </label>
+          <input v-model="emailSignIn" id="loginEmail" class="tabsInput" />
+          <p v-if="errorsSignIn.email" class="error">{{ errorsSignIn.email }}</p>
+        </fieldset>
+        <fieldset class="tabsFieldset">
+          <label class="tabsLabel" for="username"> Lösenord </label>
+          <input v-model="passwordSignIn" id="loginPassword" class="tabsInput" type="password" />
+          <p v-if="errorsSignIn.password" class="error">{{ errorsSignIn.password }}</p>
+        </fieldset>
+        <div :style="{ display: 'flex', marginTop: 20, justifyContent: 'flex-end' }">
+          <button class="tabsButton">Logga in</button>
+        </div>
+      </form>
     </TabsContent>
     <TabsContent class="TabsContent" value="tab2">
       <p class="tabsText">Skapa ett nytt konto</p>
@@ -55,17 +98,17 @@ const signUpHandler = () => {
         <fieldset class="tabsFieldset">
           <label class="tabsLabel" for="registerEmail"> E-Mail </label>
           <input v-model="emailSignUp" id="registerEmail" class="tabsInput" type="email" />
-          <p v-if="errors.email" class="error">{{ errors.email }}</p>
+          <p v-if="errorsSignUp.email" class="error">{{ errorsSignUp.email }}</p>
         </fieldset>
         <fieldset class="tabsFieldset">
           <label class="tabsLabel" for="registerUsername"> Användarnamn </label>
           <input v-model="usernameSignUp" id="registerUsername" class="tabsInput" type="name" />
-          <p v-if="errors.username" class="error">{{ errors.username }}</p>
+          <p v-if="errorsSignUp.username" class="error">{{ errorsSignUp.username }}</p>
         </fieldset>
         <fieldset class="tabsFieldset">
           <label class="tabsLabel" for="registerPassword"> Lösenord </label>
           <input v-model="passwordSignUp" id="registerPassword" class="tabsInput" type="password" />
-          <p v-if="errors.password" class="error">{{ errors.password }}</p>
+          <p v-if="errorsSignUp.password" class="error">{{ errorsSignUp.password }}</p>
         </fieldset>
         <div :style="{ display: 'flex', marginTop: 20, justifyContent: 'flex-end' }">
           <button type="submit" class="tabsButton">Skapa konto</button>
