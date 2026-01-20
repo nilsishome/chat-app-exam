@@ -78,7 +78,7 @@ const signInHandler = async () => {
         </fieldset>
         <fieldset class="tabsFieldset">
           <label class="tabsLabel" for="username"> Lösenord </label>
-          <input v-model="passwordSignIn" id="loginPassword" class="tabsInput" />
+          <input v-model="passwordSignIn" id="loginPassword" class="tabsInput" type="password" />
           <p v-if="errorsSignIn.password" class="error">{{ errorsSignIn.password }}</p>
         </fieldset>
         <div :style="{ display: 'flex', marginTop: 20, justifyContent: 'flex-end' }">

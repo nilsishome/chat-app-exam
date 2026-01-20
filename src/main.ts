@@ -10,14 +10,27 @@ import Chat from "./views/Chat.vue";
 import Settings from "./views/Settings.vue";
 
 const routes = [
-  { path: "/", component: Chat },
-  { path: "/auth", component: Auth },
-  { path: "/settings", component: Settings },
+  { path: "/", component: Chat, meta: { requiresAuth: true } },
+  { path: "/auth", component: Auth, meta: { requiresAuth: false } },
+  { path: "/settings", component: Settings, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, _, next) => {
+  if (to.meta.requiresAuth) {
+    const token = localStorage.getItem("token");
+    if (token) {
+      next();
+    } else {
+      next("/auth");
+    }
+  } else {
+    next();
+  }
 });
 
 const app = createApp(App);

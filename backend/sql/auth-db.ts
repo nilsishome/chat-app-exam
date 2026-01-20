@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import createPool from "../db";
-import type { credentialsSignUp, credentialsSignIn } from "../types";
+import type { credentialsSignUp, credentialsSignIn, credentialsFromDB } from "../types";
 
 export const signUpDataToDb = async (credentials: credentialsSignUp) => {
   const pool = createPool();
@@ -23,12 +24,10 @@ export const signUpDataToDb = async (credentials: credentialsSignUp) => {
   await pool.end();
 };
 
-export const validateSignIn = async (credentials: credentialsSignIn) => {
+export const validateSignInFromDb = async (credentials: credentialsSignIn) => {
   const pool = createPool();
 
-  const { rows } = await pool.query(`SELECT email, password FROM users WHERE email = $1`, [
-    credentials.email,
-  ]);
+  const { rows } = await pool.query(`SELECT * FROM users WHERE email = $1`, [credentials.email]);
 
   await pool.end();
 
@@ -43,7 +42,7 @@ export const validateSignIn = async (credentials: credentialsSignIn) => {
     };
   }
 
-  const user: credentialsSignIn = rows[0];
+  const user: credentialsFromDB = rows[0];
 
   const isValid = await bcrypt.compare(credentials.password, user.password);
 
@@ -58,10 +57,10 @@ export const validateSignIn = async (credentials: credentialsSignIn) => {
     };
   }
 
-  return { ok: true };
+  return { ok: true, user: { id: user.id, email: user.email, name: user.name } };
 };
 
-export const validateSignUp = (credentials: credentialsSignUp) => {
+export const validateSignUpFromClient = (credentials: credentialsSignUp) => {
   let valid: boolean = true;
 
   const isValidEmail: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -98,4 +97,20 @@ export const hashPass = async (pass: string): Promise<string> => {
   const salt = await bcrypt.genSalt(saltRounds);
   const hash = await bcrypt.hash(pass, salt);
   return hash;
+};
+
+export const jwtToken = (id: number, email: string) => {
+  try {
+    return jwt.sign(
+      {
+        userId: id,
+        email: email,
+      },
+      "supersecretkeybadabow",
+      { expiresIn: "1h" },
+    );
+  } catch (err) {
+    console.log(err);
+    return;
+  }
 };
