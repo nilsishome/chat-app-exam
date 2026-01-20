@@ -106,7 +106,7 @@ export const jwtToken = (id: number, email: string) => {
         userId: id,
         email: email,
       },
-      "supersecretkeybadabow",
+      String(process.env.JWT_SECRET),
       { expiresIn: "1h" },
     );
   } catch (err) {
