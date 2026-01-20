@@ -18,7 +18,7 @@
     "lint": "eslint . --fix --cache",
     "dev:frontend": "vite",
     "dev:backend": "nodemon --exec tsx backend/server.ts",
-    "dev": "run-p run:vite run:express"
+    "dev": "run-p dev:backend dev:frontend"
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
