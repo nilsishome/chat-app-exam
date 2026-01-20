@@ -9,6 +9,17 @@
     DialogDescription,
     DialogClose
   } from 'radix-vue'
+
+  import { ref } from 'vue';
+  import { useUserStore } from '../store/user';
+  import { createChat } from "../services/createChat";
+
+  const userStore = useUserStore();
+  const inputId = ref<number>(0)
+
+  const createChatClick = async () => {
+    await createChat(userStore.id, Number(inputId.value))
+  }
 </script>
 
 <template>
@@ -35,6 +46,7 @@
             type="text"
             class="dialogInput"
             placeholder="Användar id"
+            v-model="inputId"
           />
 
           <div class="dialogActions">
@@ -42,7 +54,7 @@
               <button class="cancelButton">Avbryt</button>
             </DialogClose>
 
-            <button class="acceptButton">
+            <button v-on:click="createChatClick" class="acceptButton">
               Skapa
             </button>
           </div>

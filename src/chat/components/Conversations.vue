@@ -1,15 +1,26 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
 import { useConversationsStore } from "../store/conversations";
 import { useCurrentConversationStore } from "../store/currentConversation";
 import type { conversation } from "../store/conversations";
+import { useUserStore } from "../store/user";
+import { getUserConversations } from "../services/createChat";
 
 const conversationStore = useConversationsStore();
+const userStore = useUserStore();
+
 const currentConversationStore = useCurrentConversationStore();
 
 const setCurrentConversation = (conversation: conversation): void => {
   currentConversationStore.applyCurrentConversation(conversation);
 };
+
+onMounted(async () => {
+  const userConversations = await getUserConversations(userStore.id);
+
+  conversationStore.applyUserConversations(userConversations);
+});
 </script>
 
 <template>

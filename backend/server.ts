@@ -3,13 +3,20 @@ dotenv.config();
 
 import express from "express";
 import createPool from "./db";
+import chatRouter from "./router/chat.ts";
 import { port } from "./config";
 import authRouter from "./routes/auth";
 
 const app = express();
 
 app.use(express.json());
+
+app.use("/api/chat", chatRouter);
 app.use("/api/auth", authRouter);
+
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).send("Hello, World!");
+});
 
 app.get("/test-db", async (_, res) => {
   const pool = createPool();
