@@ -1,13 +1,29 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { ref } from "vue";
 import Bubble from "./Bubble.vue";
 import { storeToRefs } from "pinia";
 import { useCurrentConversationStore } from "../store/currentConversation";
+import { sendMessage } from "../services/message";
+import { useUserStore } from "../store/user";
 
 const currentStore = useCurrentConversationStore();
 const { conversation } = storeToRefs(currentStore);
 
+const userStore = useUserStore();
+
 import { watch } from "vue";
+
+const messageString = ref<string>("");
+
+const messageEnter = () => {
+  sendMessage(userStore.id, conversation.value.id, messageString);
+
+  resetMessageString();
+};
+
+const resetMessageString = () => {
+  messageString.value = "";
+};
 
 watch(
   () => conversation.value?.messages,
@@ -23,23 +39,30 @@ watch(
 <template>
   <div class="chatWrapper" v-if="conversation.name">
     <h1>{{ conversation.name }}</h1>
-    <Bubble
-      v-for="messageData in conversation.messages"
-      :key="`${messageData.sender}-${messageData.date}`"
-      :id="messageData.sender"
-      :msg="messageData"
-    />
-    <div>
+
+    <div class="messageContainer">
+      <Bubble
+        v-for="messageData in conversation.messages"
+        :key="`${messageData.sender}-${messageData.date}`"
+        :id="messageData.sender"
+        :msg="messageData"
+      />
+    </div>
+
+    <div class="messageTextBarContainer">
       <input
         id="messageTextBar"
         type="text"
         minlength="1"
         placeholder="Skriv ett meddelande..."
+        v-model="messageString"
+        v-on:keyup.enter="messageEnter"
         required
       />
-      <i class="pi pi-search sendIcon" aria-hidden="true"></i>
+      <i class="pi pi-send sendIcon" aria-hidden="true"></i>
     </div>
   </div>
+
   <div v-else class="errorMessage">
     <h2>Du är för närvarande inte i en chatt. Välj en chatt för att se meddelanden.</h2>
   </div>
@@ -67,39 +90,48 @@ h2 {
 .chatWrapper {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.messageContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.messageTextBarContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: transparent;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #messageTextBar {
-  position: fixed;
-  bottom: 2.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  padding-left: 1rem;
-  width: 45rem;
-  height: 2rem;
+  flex: 1;
+  height: 2.5rem;
   border-radius: 10px;
   border: none;
   outline: none;
+  padding-left: 1rem;
+  font-family: "Dosis", sans-serif;
+  padding-right: 3rem;
 }
 
 .sendIcon {
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: black;
+  color: rgb(0, 0, 0);
   pointer-events: none;
   font-size: 0.8rem;
-}
-
-@media (min-width: 1024px) {
-  #messageTextBar {
-    transform: translateX(calc(-50% + 15rem));
-  }
-}
-
-@media (min-width: 2100px) {
-  #messageTextBar {
-    transform: translateX(calc(-50% + 21rem));
-  }
+  position: relative;
+  right: 2rem;
 }
 </style>

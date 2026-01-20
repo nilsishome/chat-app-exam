@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from "express";
 import createPool from "./db";
-import chatRouter from "./router/chat.ts";
+import chatRouter from "./routes/chat.ts";
 import { port } from "./config";
 import authRouter from "./routes/auth";
 
