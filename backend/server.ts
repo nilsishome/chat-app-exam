@@ -32,9 +32,17 @@ app.listen(port, () => {
   console.log(`Express Server is listening on port ${port}`);
 });
 
-import { run } from "./sql/test-db";
+// import { run } from "./sql/test-db";
 
-run().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// run().catch((err) => {
+//   console.error(err);
+//   process.exit(1);
+// });
+
+// import { sendMessage } from "./sql/messages.ts";
+
+// sendMessage(1, 2, "Hej hoppas du mår bra idag!");
+
+import { createConversationDb } from "./sql/createChat";
+
+createConversationDb();

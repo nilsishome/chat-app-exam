@@ -92,7 +92,7 @@ export const getUserConversations = async (userId: number) => {
     let currentTable = {
       name: String(unknownUserData.name),
       id: Number(unknownUserData.id),
-      status: Boolean(true), // Måste ändras senare. 
+      status: Boolean(true), // Måste ändras senare.
       messages: chat.messages as message[],
       image: String(unknownUserData.image),
     };

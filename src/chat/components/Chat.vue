@@ -1,19 +1,31 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import Bubble from "./Bubble.vue";
 import { storeToRefs } from "pinia";
 import { useCurrentConversationStore } from "../store/currentConversation";
 
 const currentStore = useCurrentConversationStore();
 const { conversation } = storeToRefs(currentStore);
+
+import { watch } from "vue";
+
+watch(
+  () => conversation.value?.messages,
+  (val) => {
+    console.log("messages changed:", val);
+    console.log("type:", typeof val);
+    console.log("isArray:", Array.isArray(val));
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
   <div class="chatWrapper" v-if="conversation.name">
     <h1>{{ conversation.name }}</h1>
-    <!-- <Bubble text="Hello" /> -->
     <Bubble
       v-for="messageData in conversation.messages"
-      :key="messageData.sender"
+      :key="`${messageData.sender}-${messageData.date}`"
       :id="messageData.sender"
       :msg="messageData"
     />
