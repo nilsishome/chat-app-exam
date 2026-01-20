@@ -2,16 +2,17 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import { Request, Response } from "express";
 import createPool from "./db";
 import chatRouter from "./router/chat.ts";
+import { port } from "./config";
+import authRouter from "./routes/auth";
 
 const app = express();
-export const port = process.env.PORT || 8080;
 
 app.use(express.json());
 
 app.use("/api/chat", chatRouter);
+app.use("/api/auth", authRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("Hello, World!");

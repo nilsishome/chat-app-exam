@@ -17,11 +17,12 @@
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
     "dev:frontend": "vite",
-    "dev:backend": "nodemon --exec tsx backend/server.ts",
-    "dev": "run-p dev:backend dev:frontend"
+    "dev:backend": "docker compose -f backend/docker-compose.yml up -d && nodemon --exec tsx backend/server.ts",
+    "dev": "run-p dev:frontend dev:backend"
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "pg": "^8.16.3",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.3",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^24.10.1",
