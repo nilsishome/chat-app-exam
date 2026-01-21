@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { io, Socket } from "socket.io-client";
 import { getUserConversations } from "../services/conversationService";
-
+import { useUserStore } from "./user";
 export interface Message {
   message: string;
   date: number;
@@ -14,10 +14,11 @@ export interface Conversation {
   status: boolean;
   messages: Message[];
   image: string;
+  conversationid: number;
 }
 
 interface ServerToClientEvents {
-  "chat:fetchConversation": (userId: number) => void;
+  "chat:fetchConversation": (userId: number, senderId: number) => void;
 }
 
 interface ClientToServerEvents {
@@ -45,6 +46,7 @@ export const useConversationsStore = defineStore("conversations", {
     },
 
     connect(): void {
+      const userStore = useUserStore();
       if (this.socket) return;
 
       this.socket = io("http://localhost:8080") as Socket<
@@ -62,10 +64,12 @@ export const useConversationsStore = defineStore("conversations", {
         this.isConnected = false;
       });
 
-      this.socket.on("chat:fetchConversation", async (userId) => {
-        const userConversations = await getUserConversations(userId);
+      this.socket.on("chat:fetchConversation", async (userId: number, senderId: number) => {
+        if (userStore.id == userId || userStore.id == senderId) {
+          const userConversations = await getUserConversations(userStore.id);
 
-        this.conversations = userConversations;
+          this.conversations = userConversations;
+        }
       });
     },
 

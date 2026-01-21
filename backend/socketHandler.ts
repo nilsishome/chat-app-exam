@@ -13,7 +13,7 @@ export const registerChatSockets = (io: Server) => {
     socket.on("chat:addConversation", async (userId, senderId) => {
       const data = await createChat(userId, senderId);
 
-      io.emit("chat:fetchConversation", userId);
+      io.emit("chat:fetchConversation", userId, senderId);
     });
 
     socket.on("chat:sendMessage", async (userId, senderId, message) => {

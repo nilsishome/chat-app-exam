@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import type { Conversation } from "./conversations";
 import { io, Socket } from "socket.io-client";
+import { useUserStore } from "./user";
 
 interface ServerToClientEvents {
   "chat:fetchMessage": (conversation: Conversation) => void;
@@ -8,6 +9,13 @@ interface ServerToClientEvents {
 
 interface ClientToServerEvents {
   "chat:sendMessage": (userId: number, senderId: number, message: string) => void;
+}
+
+interface recievingConversation extends Conversation {
+  conversationid: number;
+  created_at: number;
+  senderid: number;
+  userid: number;
 }
 
 export const useCurrentConversationStore = defineStore("conversation", {
@@ -36,6 +44,8 @@ export const useCurrentConversationStore = defineStore("conversation", {
     },
 
     connect(): void {
+      const userStore = useUserStore();
+
       this.socket = io("http://localhost:8080") as Socket<
         ServerToClientEvents,
         ClientToServerEvents
@@ -50,7 +60,16 @@ export const useCurrentConversationStore = defineStore("conversation", {
       });
 
       this.socket.on("chat:fetchMessage", async (conversation: Conversation) => {
-        this.conversation.messages = conversation.messages;
+        const conv = conversation as recievingConversation;
+        console.log(this.conversation);
+
+        if (conv.userid == userStore.id || conv.senderid == userStore.id) {
+          if (this.conversation) {
+            if (this.conversation.conversationid == conv.conversationid) {
+              this.conversation.messages = conversation.messages;
+            }
+          }
+        }
       });
     },
 
