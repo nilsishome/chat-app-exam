@@ -9,11 +9,7 @@ const firstName = userStore.name.split(" ")[0];
   <div class="wrapper">
     <div class="userInfo">
       <AvatarRoot class="AvatarRoot">
-        <AvatarImage
-          class="AvatarImage"
-          src="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"
-          :alt="userStore.name"
-        />
+        <AvatarImage class="AvatarImage" :src="userStore.image" :alt="userStore.name" />
         <AvatarFallback class="AvatarFallback" :delay-ms="600"
           >{{ userStore.name[0] }}{{ userStore.name[1] }}</AvatarFallback
         >
