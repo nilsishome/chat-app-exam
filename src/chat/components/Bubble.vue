@@ -3,7 +3,7 @@ import { ref, onMounted, onBeforeUnmount, watch, nextTick, type PropType } from 
 import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
 import { storeToRefs } from "pinia";
 import { useCurrentConversationStore } from "../store/currentConversation";
-import { useUserStore } from '../store/user';
+import { useUserStore } from "../store/user";
 import type { message } from "../store/conversations";
 
 const userStore = useUserStore();
@@ -11,8 +11,8 @@ const currentStore = useCurrentConversationStore();
 const { conversation } = storeToRefs(currentStore);
 
 const props = defineProps({
-  id: { type: Number as PropType<number>, required: true},
-  msg: { type: Object as PropType<message>, required: true},
+  id: { type: Number as PropType<number>, required: true },
+  msg: { type: Object as PropType<message>, required: true },
 });
 
 const bubbleRef = ref<HTMLElement | null>(null);
@@ -115,7 +115,7 @@ onMounted(() => {
     () => props.msg.message,
     () => {
       nextTick().then(computeLayout);
-    }
+    },
   );
 });
 
@@ -126,17 +126,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div 
-    class="wrapper"
-    :class="$props.msg.sender == userStore.id ? 'contact' : 'user'"
-  >
+  <div class="wrapper" :class="$props.msg.sender == userStore.id ? 'user' : 'contact'">
     <AvatarRoot class="AvatarRoot">
       <AvatarImage
         class="AvatarImage"
         :src="$props.msg.sender == userStore.id ? userStore.image : conversation.image"
         alt="avatar image"
       />
-      <AvatarFallback class="AvatarFallback" :delay-ms="600">{{ conversation.name[0] }} {{ conversation.name[1] }}</AvatarFallback>
+      <AvatarFallback class="AvatarFallback" :delay-ms="600"
+        >{{ conversation.name[0] }} {{ conversation.name[1] }}</AvatarFallback
+      >
     </AvatarRoot>
     <div
       ref="bubbleRef"
@@ -185,7 +184,9 @@ onBeforeUnmount(() => {
   background-color: var(--color-background);
   box-shadow: -3px 4px 4px rgba(81, 179, 154, 0.25);
   box-sizing: border-box;
-  transition: paddings 160ms ease, border-radius 160ms ease;
+  transition:
+    paddings 160ms ease,
+    border-radius 160ms ease;
   max-width: fit-content;
 
   animation-name: contact-ani;
