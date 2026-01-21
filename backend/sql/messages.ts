@@ -1,4 +1,4 @@
-import createPool from "../db";
+import { pool } from "../db";
 import { getConversation } from "./createChat";
 
 export const sendMessage = async (userId: number, senderId: number, message: string) => {
@@ -13,8 +13,6 @@ export const sendMessage = async (userId: number, senderId: number, message: str
 
   currentMessages.push(newMessage);
 
-  const pool = createPool();
-
   const result = await pool.query(
     `
       UPDATE
@@ -26,8 +24,6 @@ export const sendMessage = async (userId: number, senderId: number, message: str
     `,
     [JSON.stringify(currentMessages), conversation[0].conversationid],
   );
-
-  pool.end();
 
   if (result.rowCount > 0) {
     return true;

@@ -1,14 +1,15 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
-import createPool from "./db";
+import express, { Request, Response } from "express";
+import { pool } from "./db";
 import chatRouter from "./routes/chat.ts";
 import { port } from "./config";
 import authRouter from "./routes/auth";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import { registerChatSockets } from "./socketHandler.ts";
+import { createConversationDb } from "./sql/createChat";
 
 export const app = express();
 
@@ -22,13 +23,9 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.get("/test-db", async (_, res) => {
-  const pool = createPool();
   await pool.connect();
-
   const result = await pool.query("SELECT NOW()");
   res.json(result.rows[0]);
-
-  await pool.end();
 });
 
 const server = createServer(app);
@@ -37,23 +34,31 @@ const io = new Server(server, {
   cors: { origin: "http://localhost:5173", methods: ["GET", "POST"] },
 });
 
+createConversationDb();
 registerChatSockets(io);
 
 server.listen(port, () => {
   console.log(`Express Server is listening on port ${port}`);
 });
 
-// import { run } from "./sql/test-db";
+const shutdown = async (signal: string) => {
+  console.log(`\nReceived ${signal}. Closing server gracefully...`);
 
-// run().catch((err) => {
-//   console.error(err);
-//   process.exit(1);
-// });
+  try {
+    server.close(async () => {
+      console.log("Closing HTTP server...");
 
-// import { sendMessage } from "./sql/messages.ts";
+      await pool.end();
+      console.log("Closing database pool...");
 
-// sendMessage(2, 1, "Hej hoppas du mår bra idag!");
+      console.log("Shutdown complete. Exiting process.");
+      process.exit(0);
+    });
+  } catch (err) {
+    console.error("Error during shutdown:", err);
+    process.exit(1);
+  }
+};
 
-// import { createConversationDb } from "./sql/createChat";
-
-// createConversationDb();
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
