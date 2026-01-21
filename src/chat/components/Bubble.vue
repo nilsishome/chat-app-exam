@@ -240,7 +240,9 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-background-soft);
+  background-color: transparent;
+  border: 2px solid var(--color-border);
+  border-radius: inherit;
   color: var(--color-heading);
   font-size: 15px;
   line-height: 1;
