@@ -10,7 +10,8 @@ export const signUpDataToDb = async (credentials: credentialsSignUp) => {
       name VARCHAR NOT NULL,
       email VARCHAR UNIQUE NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      password VARCHAR NOT NULL
+      password VARCHAR NOT NULL,
+      image VARCHAR DEFAULT ''
     );
   `);
 
@@ -49,7 +50,14 @@ export const validateSignInFromDb = async (credentials: credentialsSignIn) => {
     };
   }
 
-  return { ok: true, user: { id: user.id, email: user.email, name: user.name } };
+  return {
+    ok: true,
+    user: {
+      id: user.id,
+      name: user.name,
+      image: user.image,
+    },
+  };
 };
 
 export const validateSignUpFromClient = (credentials: credentialsSignUp) => {
@@ -91,12 +99,12 @@ export const hashPass = async (pass: string): Promise<string> => {
   return hash;
 };
 
-export const jwtToken = (id: number, email: string) => {
+export const jwtToken = (id: number, name: string) => {
   try {
     return jwt.sign(
       {
         userId: id,
-        email: email,
+        name: name,
       },
       String(process.env.JWT_SECRET),
       { expiresIn: "1h" },

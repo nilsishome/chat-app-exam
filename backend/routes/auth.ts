@@ -40,7 +40,7 @@ authRouter.post("/sign-in", async (req: Request, res: Response) => {
     });
     return;
   } else if (result.user) {
-    const token = jwtToken(result.user.id, result.user.email);
+    const token = jwtToken(result.user.id, result.user.name);
     res.status(200).json({
       message: "Inloggningen lyckades!",
       user: result.user,

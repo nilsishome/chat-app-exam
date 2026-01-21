@@ -59,7 +59,12 @@ const signInHandler = async () => {
       return;
     }
     // Successful login
-    userStore.setUser(response.user.name, response.user.id);
+    const credentialsUser = {
+      id: response.user.id,
+      name: response.user.name,
+      image: response.user.image,
+    };
+    userStore.setUser(credentialsUser);
     localStorage.setItem("token", response.token);
     router.push("/");
   } catch (err) {
