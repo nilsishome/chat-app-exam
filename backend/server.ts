@@ -1,8 +1,8 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
-import createPool from "./db";
+import express, { Request, Response } from "express";
+import { pool } from "./db";
 import chatRouter from "./routes/chat.ts";
 import { port } from "./config";
 import authRouter from "./routes/auth";
@@ -19,18 +19,38 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.get("/test-db", async (_, res) => {
-  const pool = createPool();
   await pool.connect();
-
   const result = await pool.query("SELECT NOW()");
   res.json(result.rows[0]);
-
-  await pool.end();
 });
 
-app.listen(port, () => {
+const runningApp = app.listen(port, () => {
   console.log(`Express Server is listening on port ${port}`);
 });
+
+const shutdown = async (signal: string) => {
+  console.log(`\nReceived ${signal}. Closing server gracefully...`);
+
+  try {
+    runningApp.close(async () => {
+      console.log("Closing HTTP server...");
+
+      await pool.end();
+      console.log("Closing database pool...");
+
+      console.log("Shutdown complete. Exiting process.");
+      process.exit(0);
+    });
+  } catch (err) {
+    console.error("Error during shutdown:", err);
+    process.exit(1);
+  }
+};
+
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+
+// For testing purposes only
 
 // import { run } from "./sql/test-db";
 
