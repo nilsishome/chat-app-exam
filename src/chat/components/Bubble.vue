@@ -4,7 +4,7 @@ import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
 import { storeToRefs } from "pinia";
 import { useCurrentConversationStore } from "../store/currentConversation";
 import { useUserStore } from "../store/user";
-import type { message } from "../store/conversations";
+import type { Message } from "../store/conversations";
 
 const userStore = useUserStore();
 const currentStore = useCurrentConversationStore();
@@ -12,7 +12,7 @@ const { conversation } = storeToRefs(currentStore);
 
 const props = defineProps({
   id: { type: Number as PropType<number>, required: true },
-  msg: { type: Object as PropType<message>, required: true },
+  msg: { type: Object as PropType<Message>, required: true },
 });
 
 const bubbleRef = ref<HTMLElement | null>(null);

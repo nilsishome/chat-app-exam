@@ -1,107 +1,78 @@
 import { defineStore } from "pinia";
+import { io, Socket } from "socket.io-client";
+import { getUserConversations } from "../services/conversationService";
 
-export interface message {
+export interface Message {
   message: string;
-  date: Date;
+  date: number;
   sender: number;
 }
 
-export interface conversation {
+export interface Conversation {
   name: string;
   id: number;
   status: boolean;
-  messages: message[];
+  messages: Message[];
   image: string;
 }
 
-// let messages = [
-//   {
-//     sender: 1,
-//     date: new Date("2026-01-08"),
-//     message: "Hej! Hur mår du idag?",
-//   },
-//   {
-//     sender: 2,
-//     date: new Date("2026-01-08"),
-//     message: "Mycket bra tack! Hur mår du?",
-//   },
-//   {
-//     sender: 1,
-//     date: new Date("2026-01-08"),
-//     message: "Jättebra tack!",
-//   },
-//   {
-//     sender: 1,
-//     date: new Date("2026-01-08"),
-//     message: "Jättebra tack!",
-//   },
-//   {
-//     sender: 2,
-//     date: new Date("2026-01-08"),
-//     message: "Jättebra tack!",
-//   },
-//   {
-//     sender: 1,
-//     date: new Date("2026-01-08"),
-//     message: "Jättebra tack!",
-//   },
-//   {
-//     sender: 1,
-//     date: new Date("2026-01-08"),
-//     message: "Jättebra tack!",
-//   },
-// ];
+interface ServerToClientEvents {
+  "chat:fetchConversation": (userId: number) => void;
+}
 
-// let testConversation = [
-//   {
-//     name: "Anton Eriksson",
-//     status: true,
-//     messages: messages,
-//     id: 2,
-//     image:
-//       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1jfnUGTZv24EtkP2fDObJ8TQI90kP9kFadw&s",
-//   },
-//   {
-//     name: "Lasse Eriksson",
-//     status: false,
-//     messages: [],
-//     id: 3,
-//     image: "https://i.pinimg.com/736x/24/64/fb/2464fb46debaa81f4db72c7f89499124.jpg",
-//   },
-//   {
-//     name: "Antonia Hermansson",
-//     status: true,
-//     messages: [],
-//     id: 4,
-//     image:
-//       "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?cs=srgb&dl=pexels-olly-774909.jpg&fm=jpg",
-//   },
-//   {
-//     name: "Jesper Larsson",
-//     status: false,
-//     messages: [],
-//     id: 5,
-//     image:
-//       "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?cs=srgb&dl=pexels-creationhill-1681010.jpg&fm=jpg",
-//   },
-// ];
+interface ClientToServerEvents {
+  "chat:addConversation": (userId: number, senderId: number) => void;
+}
 
 export const useConversationsStore = defineStore("conversations", {
   state: () => {
     return {
-      conversations: [] as conversation[],
+      conversations: [] as Conversation[],
       status: true as boolean,
       searchQuery: "" as string,
+      isConnected: false as boolean,
+      socket: null as Socket<ServerToClientEvents, ClientToServerEvents> | null,
     };
   },
 
   actions: {
-    async applyUserConversations(conversation: conversation[]) {
+    applyUserConversations(conversation: Conversation[]) {
       try {
         this.conversations = conversation;
       } catch (error) {
         return error;
       }
+    },
+
+    connect(): void {
+      if (this.socket) return;
+
+      this.socket = io("http://localhost:8080") as Socket<
+        ServerToClientEvents,
+        ClientToServerEvents
+      >;
+
+      this.socket.on("connect", () => {
+        this.status = true;
+        this.isConnected = true;
+      });
+
+      this.socket.on("disconnect", () => {
+        this.status = false;
+        this.isConnected = false;
+      });
+
+      this.socket.on("chat:fetchConversation", async (userId) => {
+        const userConversations = await getUserConversations(userId);
+
+        this.conversations = userConversations;
+      });
+    },
+
+    createChat(userId: number, senderId: number): void {
+      if (!this.socket) return;
+
+      this.socket.emit("chat:addConversation", userId, senderId);
     },
   },
 
