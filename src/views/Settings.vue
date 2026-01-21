@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useUserStore } from "@/chat/store/user";
 import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
+const userStore = useUserStore();
+const firstName = userStore.name.split(" ")[0];
 </script>
 
 <template>
@@ -9,13 +12,15 @@ import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
         <AvatarImage
           class="AvatarImage"
           src="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"
-          alt="Erik Svensson"
+          :alt="userStore.name"
         />
-        <AvatarFallback class="AvatarFallback" :delay-ms="600">ES</AvatarFallback>
+        <AvatarFallback class="AvatarFallback" :delay-ms="600"
+          >{{ userStore.name[0] }}{{ userStore.name[1] }}</AvatarFallback
+        >
       </AvatarRoot>
-      <h1>Erik Svensson</h1>
+      <h1>{{ userStore.name }}</h1>
     </div>
-    <p>Välkommen Erik.</p>
+    <p>Välkommen {{ firstName }}.</p>
 
     <button>Darkmode (på)</button>
     <button>Logga ut</button>
