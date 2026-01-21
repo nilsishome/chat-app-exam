@@ -1,8 +1,6 @@
-import createPool from "../db";
+import { pool } from "../db";
 
 export const createConversationDb = async () => {
-  const pool = createPool();
-
   await pool.query(`
     CREATE TABLE IF NOT EXISTS conversations (
       conversationId SERIAL PRIMARY KEY,
@@ -15,8 +13,6 @@ export const createConversationDb = async () => {
 };
 
 export const getConversation = async (userId: number, senderId: number) => {
-  const pool = createPool();
-
   const { rows } = await pool.query(
     `
     SELECT 
@@ -31,13 +27,10 @@ export const getConversation = async (userId: number, senderId: number) => {
     [userId, senderId],
   );
 
-  await pool.end();
   return rows;
 };
 
 export const createChat = async (userId: number, senderId: number) => {
-  const pool = createPool();
-
   const conversation = await getConversation(userId, senderId);
   const validUser = await findId(senderId);
 
@@ -47,8 +40,6 @@ export const createChat = async (userId: number, senderId: number) => {
         `INSERT INTO conversations (userId, senderId, messages) VALUES ($1, $2, $3)`,
         [userId, senderId, "[]"],
       );
-
-      await pool.end();
 
       return {
         response: true,
@@ -70,8 +61,6 @@ export const createChat = async (userId: number, senderId: number) => {
 };
 
 const findId = async (id: number) => {
-  const pool = createPool();
-
   const { rows } = await pool.query(
     `
     SELECT 
@@ -84,14 +73,10 @@ const findId = async (id: number) => {
     [id],
   );
 
-  await pool.end();
-
   return rows;
 };
 
 export const getAllUserConversations = async (id: number) => {
-  const pool = createPool();
-
   const { rows } = await pool.query(
     `
     SELECT 
@@ -106,7 +91,6 @@ export const getAllUserConversations = async (id: number) => {
     [id],
   );
 
-  await pool.end();
   return rows;
 };
 
@@ -115,8 +99,6 @@ export const getUnknownUserFromConversation = async (
   userId: number,
   senderId: number,
 ) => {
-  const pool = createPool();
-
   const { rows } = await pool.query(
     `
     SELECT 

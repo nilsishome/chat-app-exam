@@ -1,11 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import createPool from "../db";
+import { pool } from "../db";
 import type { credentialsSignUp, credentialsSignIn, credentialsFromDB } from "../types";
 
 export const signUpDataToDb = async (credentials: credentialsSignUp) => {
-  const pool = createPool();
-
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
@@ -20,16 +18,10 @@ export const signUpDataToDb = async (credentials: credentialsSignUp) => {
     `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING`,
     [credentials.username, credentials.email, credentials.password],
   );
-
-  await pool.end();
 };
 
 export const validateSignInFromDb = async (credentials: credentialsSignIn) => {
-  const pool = createPool();
-
   const { rows } = await pool.query(`SELECT * FROM users WHERE email = $1`, [credentials.email]);
-
-  await pool.end();
 
   if (rows.length === 0) {
     console.error("error: Finns ingen matchning på användare i DB!");
