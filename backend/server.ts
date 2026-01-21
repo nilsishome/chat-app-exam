@@ -6,8 +6,12 @@ import { pool } from "./db";
 import chatRouter from "./routes/chat.ts";
 import { port } from "./config";
 import authRouter from "./routes/auth";
+import { Server } from "socket.io";
+import { createServer } from "http";
+import { registerChatSockets } from "./socketHandler.ts";
+import { createConversationDb } from "./sql/createChat";
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 
@@ -24,7 +28,16 @@ app.get("/test-db", async (_, res) => {
   res.json(result.rows[0]);
 });
 
-const runningApp = app.listen(port, () => {
+const server = createServer(app);
+
+const io = new Server(server, {
+  cors: { origin: "http://localhost:5173", methods: ["GET", "POST"] },
+});
+
+createConversationDb();
+registerChatSockets(io);
+
+server.listen(port, () => {
   console.log(`Express Server is listening on port ${port}`);
 });
 
@@ -32,7 +45,7 @@ const shutdown = async (signal: string) => {
   console.log(`\nReceived ${signal}. Closing server gracefully...`);
 
   try {
-    runningApp.close(async () => {
+    server.close(async () => {
       console.log("Closing HTTP server...");
 
       await pool.end();
@@ -49,20 +62,3 @@ const shutdown = async (signal: string) => {
 
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
-
-// For testing purposes only
-
-// import { run } from "./sql/test-db";
-
-// run().catch((err) => {
-//   console.error(err);
-//   process.exit(1);
-// });
-
-// import { sendMessage } from "./sql/messages.ts";
-
-// sendMessage(2, 1, "Hej hoppas du mår bra idag!");
-
-// import { createConversationDb } from "./sql/createChat";
-
-// createConversationDb();

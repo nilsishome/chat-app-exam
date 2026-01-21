@@ -1,27 +1,4 @@
-import type { conversation, message } from "../store/conversations";
-
-export const createChat = async (userId: number, senderId: number) => {
-  try {
-    const response = await fetch("/api/chat/create-chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: userId,
-        senderId: senderId,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to create chat");
-    }
-
-    const data = await response.json();
-  } catch (errorMessage) {
-    console.error(errorMessage);
-  }
-};
+import type { Conversation, Message } from "../store/conversations";
 
 const getUserConversationsDB = async (userId: number) => {
   try {
@@ -79,7 +56,7 @@ const getUnknownUserFromConversationDB = async (
 
 export const getUserConversations = async (userId: number) => {
   const convoDB = await getUserConversationsDB(userId);
-  let sendingConversation = [] as conversation[];
+  let sendingConversation = [] as Conversation[];
 
   for (let currentIndex = 0; currentIndex < convoDB.length; currentIndex++) {
     const chat = convoDB[currentIndex];
@@ -93,7 +70,7 @@ export const getUserConversations = async (userId: number) => {
       name: String(unknownUserData.name),
       id: Number(unknownUserData.id),
       status: Boolean(true), // Måste ändras senare.
-      messages: chat.messages as message[],
+      messages: chat.messages as Message[],
       image: String(unknownUserData.image),
     };
 

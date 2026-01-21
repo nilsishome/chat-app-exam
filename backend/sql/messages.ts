@@ -13,10 +13,6 @@ export const sendMessage = async (userId: number, senderId: number, message: str
 
   currentMessages.push(newMessage);
 
-  const result = saveMessagesToDb(currentMessages, conversation[0].conversationid);
-};
-
-export const saveMessagesToDb = async (messages, conversationId) => {
   const result = await pool.query(
     `
       UPDATE
@@ -26,7 +22,7 @@ export const saveMessagesToDb = async (messages, conversationId) => {
       WHERE 
         "conversationid" = $2
     `,
-    [JSON.stringify(messages), conversationId],
+    [JSON.stringify(currentMessages), conversation[0].conversationid],
   );
 
   if (result.rowCount > 0) {

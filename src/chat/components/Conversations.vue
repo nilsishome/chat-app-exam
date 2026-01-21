@@ -3,16 +3,16 @@ import { onMounted } from "vue";
 import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
 import { useConversationsStore } from "../store/conversations";
 import { useCurrentConversationStore } from "../store/currentConversation";
-import type { conversation } from "../store/conversations";
+import type { Conversation } from "../store/conversations";
 import { useUserStore } from "../store/user";
-import { getUserConversations } from "../services/createChat";
+import { getUserConversations } from "../services/conversationService";
 
 const conversationStore = useConversationsStore();
 const userStore = useUserStore();
 
 const currentConversationStore = useCurrentConversationStore();
 
-const setCurrentConversation = (conversation: conversation): void => {
+const setCurrentConversation = (conversation: Conversation): void => {
   currentConversationStore.applyCurrentConversation(conversation);
 };
 
@@ -31,7 +31,6 @@ onMounted(async () => {
       class="conversationDiv"
     >
       <AvatarRoot class="conversationAvatarRoot">
-        <a class="conversationNotifications">2</a>
         <a :class="conversation.status ? 'statusOn' : 'statusOff'" class="conversationStatus"></a>
         <AvatarImage class="conversationAvatarImage" :src="conversation.image" alt="Colm Tuite" />
         <AvatarFallback class="conversationAvatarFallback" :delay-ms="600">
@@ -98,25 +97,6 @@ onMounted(async () => {
 .conversationIcon:hover {
   cursor: pointer;
   color: white;
-}
-
-.conversationNotifications {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(-30%, -30%);
-  background: transparent;
-  border: 0.5px solid var(--color-heading);
-  box-shadow: 1px 1px 1px 1px var(--color-background-soft);
-  color: var(--color-heading);
-  border-radius: 50%;
-  width: 1rem;
-  height: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  z-index: 10;
 }
 
 .conversationNotifications:hover {

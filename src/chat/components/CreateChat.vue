@@ -12,13 +12,14 @@ import {
 
 import { ref } from "vue";
 import { useUserStore } from "../store/user";
-import { createChat } from "../services/createChat";
+import { useConversationsStore } from "../store/conversations";
 
+const conversationStore = useConversationsStore();
 const userStore = useUserStore();
 const inputId = ref<number>(0);
 
 const createChatClick = async () => {
-  await createChat(userStore.id, Number(inputId.value));
+  conversationStore.createChat(userStore.id, Number(inputId.value));
 };
 </script>
 
