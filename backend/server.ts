@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from "express";
 import createPool from "./db";
-import chatRouter from "./router/chat.ts";
+import chatRouter from "./routes/chat.ts";
 import { port } from "./config";
 import authRouter from "./routes/auth";
 
@@ -32,9 +32,17 @@ app.listen(port, () => {
   console.log(`Express Server is listening on port ${port}`);
 });
 
-import { run } from "./sql/test-db";
+// import { run } from "./sql/test-db";
 
-run().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// run().catch((err) => {
+//   console.error(err);
+//   process.exit(1);
+// });
+
+// import { sendMessage } from "./sql/messages.ts";
+
+// sendMessage(2, 1, "Hej hoppas du mår bra idag!");
+
+// import { createConversationDb } from "./sql/createChat";
+
+// createConversationDb();

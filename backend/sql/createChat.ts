@@ -1,6 +1,20 @@
 import createPool from "../db";
 
-const getConversation = async (userId: number, senderId: number) => {
+export const createConversationDb = async () => {
+  const pool = createPool();
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS conversations (
+      conversationId SERIAL PRIMARY KEY,
+      userId SERIAL NOT NULL,
+      senderId SERIAL NOT NULL,
+      messages JSONB,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+};
+
+export const getConversation = async (userId: number, senderId: number) => {
   const pool = createPool();
 
   const { rows } = await pool.query(
@@ -29,16 +43,6 @@ export const createChat = async (userId: number, senderId: number) => {
 
   if (validUser.length !== 0) {
     if (conversation.length === 0) {
-      await pool.query(`
-        CREATE TABLE IF NOT EXISTS conversations (
-          conversationId SERIAL PRIMARY KEY,
-          userId SERIAL NOT NULL,
-          senderId SERIAL NOT NULL,
-          messages VARCHAR NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-      `);
-
       await pool.query(
         `INSERT INTO conversations (userId, senderId, messages) VALUES ($1, $2, $3)`,
         [userId, senderId, "[]"],
