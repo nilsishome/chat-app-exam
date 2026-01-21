@@ -85,6 +85,8 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   background-color: white;
+  color: var(--color-background);
+  border-radius: inherit;
   font-size: 15px;
   line-height: 1;
   font-weight: 500;

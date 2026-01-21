@@ -134,7 +134,10 @@ onBeforeUnmount(() => {
         alt="avatar image"
       />
       <AvatarFallback class="AvatarFallback" :delay-ms="600"
-        >{{ conversation.name[0] }} {{ conversation.name[1] }}</AvatarFallback
+        >{{ ($props.msg.sender === userStore.id ? userStore.name : conversation.name)[0] }}
+        {{
+          ($props.msg.sender === userStore.id ? userStore.name : conversation.name)[1]
+        }}</AvatarFallback
       >
     </AvatarRoot>
     <div
@@ -240,10 +243,9 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
-  border: 2px solid var(--color-border);
+  background-color: white;
   border-radius: inherit;
-  color: var(--color-heading);
+  color: var(--color-background);
   font-size: 15px;
   line-height: 1;
   font-weight: 500;

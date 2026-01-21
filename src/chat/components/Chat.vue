@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick } from "vue";
+import { ref, nextTick, onMounted } from "vue";
 import Bubble from "./Bubble.vue";
 import { storeToRefs } from "pinia";
 import { useCurrentConversationStore } from "../store/currentConversation";
@@ -63,6 +63,10 @@ watch(
   },
   { deep: true },
 );
+
+onMounted(() => {
+  scrollToBottom();
+});
 </script>
 
 <template>
