@@ -8,3 +8,9 @@ export type credentialsSignIn = {
   email: string;
   password: string;
 };
+
+export type credentialsUser = {
+  id: number;
+  name: string;
+  image: string;
+};

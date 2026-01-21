@@ -72,6 +72,7 @@ export const getUserConversations = async (userId: number) => {
       status: Boolean(true), // Måste ändras senare.
       messages: chat.messages as Message[],
       image: String(unknownUserData.image),
+      conversationid: chat.conversationid,
     };
 
     sendingConversation.push(currentTable);
