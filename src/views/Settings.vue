@@ -1,8 +1,29 @@
 <script setup lang="ts">
 import { useUserStore } from "@/chat/store/user";
 import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
+import {
+  DialogRoot,
+  DialogTrigger,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "radix-vue";
+import { logoutAccount, deleteUserAccount } from "./services/authService";
+
 const userStore = useUserStore();
 const firstName = userStore.name.split(" ")[0];
+
+const logout = () => {
+  logoutAccount();
+};
+
+const deleteAccount = (userId: number) => {
+  deleteUserAccount(userId);
+  logout();
+};
 </script>
 
 <template>
@@ -10,18 +31,44 @@ const firstName = userStore.name.split(" ")[0];
     <div class="userInfo">
       <AvatarRoot class="AvatarRoot">
         <AvatarImage class="AvatarImage" :src="userStore.image" :alt="userStore.name" />
-        <AvatarFallback class="AvatarFallback" :delay-ms="600"
-          >{{ userStore.name[0] }}{{ userStore.name[1] }}</AvatarFallback
-        >
+        <AvatarFallback class="AvatarFallback" :delay-ms="600">
+          {{ userStore.name[0] }}{{ userStore.name[1] }}
+        </AvatarFallback>
       </AvatarRoot>
       <h1>{{ userStore.name }}</h1>
     </div>
+
     <p>Välkommen {{ firstName }}.</p>
 
     <button>Darkmode (på)</button>
-    <button>Logga ut</button>
+    <button @click="logout()">Logga ut</button>
 
-    <button class="deleteButton">RADERA KONTO</button>
+    <DialogRoot>
+      <DialogTrigger as-child>
+        <button class="deleteButton">RADERA KONTO</button>
+      </DialogTrigger>
+
+      <DialogPortal>
+        <DialogOverlay class="dialogOverlay" />
+        <DialogContent class="dialogContent">
+          <DialogTitle class="dialogTitle"> Radera ditt konto </DialogTitle>
+
+          <DialogDescription class="dialogDescription">
+            Är du säker på att du verkligen vill radera ditt konto?
+          </DialogDescription>
+
+          <div class="dialogActions">
+            <DialogClose as-child>
+              <button class="cancelButton">Avbryt</button>
+            </DialogClose>
+
+            <DialogClose as-child>
+              <button class="acceptButton" @click="deleteAccount(userStore.id)">RADERA</button>
+            </DialogClose>
+          </div>
+        </DialogContent>
+      </DialogPortal>
+    </DialogRoot>
   </div>
 </template>
 
@@ -73,37 +120,59 @@ button:hover {
   color: #b35151;
 }
 
-.AvatarRoot {
-  display: inline-flex;
-  margin-top: 0;
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
-  overflow: hidden;
-  width: 70px;
-  height: 70px;
-  border-radius: 100%;
-  background-color: var(--color-background-soft);
+.dialogOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
 }
 
-.AvatarImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-}
-
-.AvatarFallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-background-soft);
+.dialogContent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-background-soft);
   color: var(--color-heading);
-  font-size: 15px;
-  line-height: 1;
-  font-weight: 500;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  width: 90%;
+  max-width: 400px;
+  z-index: 1001;
+}
+
+.dialogTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-family: "Dosis", sans-serif;
+}
+
+.dialogDescription {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-family: "Dosis", sans-serif;
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.cancelButton {
+  background: transparent;
+  border: 1px solid var(--color-heading);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+.acceptButton {
+  background: var(--color-heading);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: var(--color-background);
 }
 
 @media (max-width: 400px) {

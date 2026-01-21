@@ -61,7 +61,6 @@ export const useCurrentConversationStore = defineStore("conversation", {
 
       this.socket.on("chat:fetchMessage", async (conversation: Conversation) => {
         const conv = conversation as recievingConversation;
-        console.log(this.conversation);
 
         if (conv.userid == userStore.id || conv.senderid == userStore.id) {
           if (this.conversation) {

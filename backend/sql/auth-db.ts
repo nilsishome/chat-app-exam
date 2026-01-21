@@ -114,3 +114,17 @@ export const jwtToken = (id: number, name: string) => {
     return;
   }
 };
+
+export const deleteUserFromDatabase = async (userId) => {
+  const result = await pool.query(
+    `
+    DELETE FROM 
+      users
+    WHERE
+      id = $1;
+    `,
+    [userId],
+  );
+
+  return result;
+};
