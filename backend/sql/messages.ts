@@ -35,27 +35,3 @@ export const sendMessage = async (userId: number, senderId: number, message: str
     return false;
   }
 };
-
-// export const saveMessagesToDb = async (messages, conversationId) => {
-//   const pool = createPool();
-
-//   const result = await pool.query(
-//     `
-//       UPDATE
-//         conversations
-//       SET
-//         "messages" = $1
-//       WHERE
-//         "conversationid" = $2
-//     `,
-//     [JSON.stringify(messages), conversationId],
-//   );
-
-//   pool.end();
-
-//   if (result.rowCount > 0) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };

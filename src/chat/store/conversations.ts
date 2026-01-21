@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { io, Socket } from "socket.io-client";
-import { getUserConversations } from "../services/createChat";
+import { getUserConversations } from "../services/conversationService";
 
 export interface Message {
   message: string;

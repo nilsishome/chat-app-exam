@@ -50,8 +50,6 @@ export const useCurrentConversationStore = defineStore("conversation", {
       });
 
       this.socket.on("chat:fetchMessage", async (conversation: Conversation) => {
-        console.log("this happening?");
-        console.log(this.chatToggle);
         this.conversation = conversation;
       });
     },

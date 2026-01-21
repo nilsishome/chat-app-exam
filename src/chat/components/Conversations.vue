@@ -5,7 +5,7 @@ import { useConversationsStore } from "../store/conversations";
 import { useCurrentConversationStore } from "../store/currentConversation";
 import type { Conversation } from "../store/conversations";
 import { useUserStore } from "../store/user";
-import { getUserConversations } from "../services/createChat";
+import { getUserConversations } from "../services/conversationService";
 
 const conversationStore = useConversationsStore();
 const userStore = useUserStore();

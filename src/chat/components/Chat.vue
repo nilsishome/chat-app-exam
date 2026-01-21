@@ -3,7 +3,6 @@ import { ref, nextTick } from "vue";
 import Bubble from "./Bubble.vue";
 import { storeToRefs } from "pinia";
 import { useCurrentConversationStore } from "../store/currentConversation";
-import { sendMessage } from "../services/message";
 import { useUserStore } from "../store/user";
 
 const currentStore = useCurrentConversationStore();

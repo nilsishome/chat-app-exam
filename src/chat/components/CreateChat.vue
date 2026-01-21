@@ -19,9 +19,7 @@ const userStore = useUserStore();
 const inputId = ref<number>(0);
 
 const createChatClick = async () => {
-  console.log("attemptiong to create chat?");
   conversationStore.createChat(userStore.id, Number(inputId.value));
-  // await createChat(userStore.id, Number(inputId.value));
 };
 </script>
 
