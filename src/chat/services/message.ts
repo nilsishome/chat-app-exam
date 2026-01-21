@@ -1,6 +1,5 @@
 import type { Ref } from "vue";
 export const sendMessage = async (userId: number, senderId: number, message: Ref<string>) => {
-  console.log("test", userId, senderId, message.value);
   try {
     const response = await fetch("/api/chat/send-message", {
       method: "POST",
@@ -19,8 +18,6 @@ export const sendMessage = async (userId: number, senderId: number, message: Ref
     }
 
     const data = await response;
-
-    console.log("sent message:", data);
   } catch (errorMessage) {
     console.error(errorMessage);
   }

@@ -6,8 +6,11 @@ import createPool from "./db";
 import chatRouter from "./routes/chat.ts";
 import { port } from "./config";
 import authRouter from "./routes/auth";
+import { Server } from "socket.io";
+import { createServer } from "http";
+import { registerChatSockets } from "./socketHandler.ts";
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 
@@ -28,7 +31,15 @@ app.get("/test-db", async (_, res) => {
   await pool.end();
 });
 
-app.listen(port, () => {
+const server = createServer(app);
+
+const io = new Server(server, {
+  cors: { origin: "http://localhost:5173", methods: ["GET", "POST"] },
+});
+
+registerChatSockets(io);
+
+server.listen(port, () => {
   console.log(`Express Server is listening on port ${port}`);
 });
 

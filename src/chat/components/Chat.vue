@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
 import Bubble from "./Bubble.vue";
 import { storeToRefs } from "pinia";
 import { useCurrentConversationStore } from "../store/currentConversation";
@@ -9,6 +9,8 @@ import { useUserStore } from "../store/user";
 const currentStore = useCurrentConversationStore();
 const { conversation } = storeToRefs(currentStore);
 
+const messageContainer = ref<HTMLElement | null>(null);
+
 const userStore = useUserStore();
 
 import { watch } from "vue";
@@ -16,7 +18,7 @@ import { watch } from "vue";
 const messageString = ref<string>("");
 
 const messageEnter = () => {
-  sendMessage(userStore.id, conversation.value.id, messageString);
+  currentStore.sendMessage(userStore.id, conversation.value.id, messageString.value);
 
   resetMessageString();
 };
@@ -25,14 +27,42 @@ const resetMessageString = () => {
   messageString.value = "";
 };
 
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (messageContainer.value) {
+      scrollToBottomAnimated(700);
+    }
+  });
+};
+
+const scrollToBottomAnimated = (duration = 500) => {
+  if (!messageContainer.value) return;
+
+  const element = messageContainer.value;
+  const start = element.scrollTop;
+  const end = element.scrollHeight;
+  const change = end - start;
+  const startTime = performance.now();
+
+  const animateScroll = (currentTime: number) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1); // 0 → 1
+    element.scrollTop = start + change * progress;
+
+    if (progress < 1) {
+      requestAnimationFrame(animateScroll);
+    }
+  };
+
+  requestAnimationFrame(animateScroll);
+};
+
 watch(
-  () => conversation.value?.messages,
-  (val) => {
-    console.log("messages changed:", val);
-    console.log("type:", typeof val);
-    console.log("isArray:", Array.isArray(val));
+  () => conversation.value.messages,
+  () => {
+    scrollToBottom();
   },
-  { immediate: true },
+  { deep: true },
 );
 </script>
 
@@ -40,7 +70,7 @@ watch(
   <div class="chatWrapper" v-if="conversation.name">
     <h1>{{ conversation.name }}</h1>
 
-    <div class="messageContainer">
+    <div class="messageContainer" ref="messageContainer">
       <Bubble
         v-for="messageData in conversation.messages"
         :key="`${messageData.sender}-${messageData.date}`"
@@ -102,6 +132,7 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  scroll-behavior: smooth;
 }
 
 .messageTextBarContainer {

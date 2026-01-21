@@ -9,15 +9,6 @@ import { sendMessage } from "../sql/messages";
 
 const chatRouter = express.Router();
 
-chatRouter.post("/create-chat", async (req: Request, res: Response) => {
-  const data = await createChat(req.body.userId, req.body.senderId);
-
-  res.json({
-    message: data.message,
-    success: data.response,
-  });
-});
-
 chatRouter.post("/get-chats", async (req: Request, res: Response) => {
   const data = await getAllUserConversations(req.body.id);
 
