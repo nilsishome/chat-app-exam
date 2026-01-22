@@ -18,7 +18,8 @@
     "lint": "eslint . --fix --cache",
     "dev:frontend": "vite",
     "dev:backend": "docker compose -f backend/docker-compose.yml up -d && nodemon --exec tsx backend/server.ts",
-    "dev": "run-p dev:frontend dev:backend"
+    "dev": "run-p dev:frontend dev:backend",
+    "docker:stop": "docker compose -f backend/docker-compose.yml stop"
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
