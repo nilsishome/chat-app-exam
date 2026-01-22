@@ -6,6 +6,7 @@ import {
   signUpDataToDb,
   validateSignInFromDb,
   validateSignUpFromClient,
+  deleteUserFromDatabase,
 } from "../sql/auth-db";
 
 const authRouter = express.Router();
@@ -40,11 +41,25 @@ authRouter.post("/sign-in", async (req: Request, res: Response) => {
     });
     return;
   } else if (result.user) {
-    const token = jwtToken(result.user.id, result.user.email);
+    const token = jwtToken(result.user.id, result.user.name);
     res.status(200).json({
       message: "Inloggningen lyckades!",
       user: result.user,
       token,
+    });
+  }
+});
+
+authRouter.post("/delete-account", async (req: Request, res: Response) => {
+  const result = await deleteUserFromDatabase(req.body.userId);
+
+  if (!result) {
+    res.status(404).json({
+      error: "Account was not deleted",
+    });
+  } else {
+    res.status(200).json({
+      success: result,
     });
   }
 });

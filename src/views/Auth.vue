@@ -8,8 +8,10 @@ import {
   validateSignUp,
   validateSignIn,
 } from "./services/authService";
+import { useUserStore } from "@/chat/store/user";
 
 const router = useRouter();
+const userStore = useUserStore();
 
 const emailSignUp = ref("");
 const usernameSignUp = ref("");
@@ -57,6 +59,12 @@ const signInHandler = async () => {
       return;
     }
     // Successful login
+    const credentialsUser = {
+      id: response.user.id,
+      name: response.user.name,
+      image: response.user.image,
+    };
+    userStore.setUser(credentialsUser);
     localStorage.setItem("token", response.token);
     router.push("/");
   } catch (err) {

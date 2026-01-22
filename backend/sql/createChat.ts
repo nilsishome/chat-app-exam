@@ -102,7 +102,7 @@ export const getUnknownUserFromConversation = async (
   const { rows } = await pool.query(
     `
     SELECT 
-      id, name
+      id, name, image
     FROM 
       users
     WHERE 
@@ -120,7 +120,6 @@ export const getUnknownUserFromConversation = async (
   return {
     name: user.name,
     id: user.id,
-    image:
-      "https://static.vecteezy.com/system/resources/thumbnails/048/216/761/small_2x/modern-male-avatar-with-black-hair-and-hoodie-illustration-free-png.png",
+    image: user.image,
   };
 };

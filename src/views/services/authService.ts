@@ -92,3 +92,28 @@ export const validateSignIn = (credentials: credentialsSignIn, errors: Ref<crede
 
   return valid;
 };
+
+export const logoutAccount = async () => {
+  localStorage.removeItem("token");
+  window.location.reload();
+};
+
+export const deleteUserAccount = async (userId: number) => {
+  try {
+    const response = await fetch("/api/auth/delete-account", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId,
+      }),
+    });
+
+    const res = await response.json();
+
+    return res.success;
+  } catch (err) {
+    console.error(err);
+  }
+};
