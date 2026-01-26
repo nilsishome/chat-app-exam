@@ -47,7 +47,7 @@ const returnToIndex = () => {
     <p>Välkommen {{ firstName }}.</p>
 
     <button v-on:click="returnToIndex()">Tillbaka</button>
-    <button>Darkmode (på)</button>
+    <!-- <button>Darkmode (på)</button> -->
     <button @click="logout()">Logga ut</button>
 
     <DialogRoot>
