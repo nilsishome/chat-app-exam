@@ -6,6 +6,7 @@ import Search from "@/chat/components/Search.vue";
 import CreateChat from "@/chat/components/CreateChat.vue";
 import Chat from "../chat/components/Chat.vue";
 import { useCurrentConversationStore } from "@/chat/store/currentConversation";
+import Toast from "@/toast/Toast.vue";
 
 const currentStore = useCurrentConversationStore();
 
@@ -39,6 +40,7 @@ const desktop = useMediaQuery("(min-width: 1024px)");
     <div class="chatSection">
       <Chat />
     </div>
+    <Toast />
   </div>
 </template>
 

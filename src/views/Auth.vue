@@ -9,6 +9,20 @@ import {
   validateSignIn,
 } from "./services/authService";
 import { useUserStore } from "@/chat/store/user";
+import { useToastStore } from "@/toast/toast";
+import Toast from "@/toast/Toast.vue";
+
+const toastStore = useToastStore();
+
+const setToastStore = (status: boolean, title: string, message: string) => {
+  toastStore.setStatus(status, title, message);
+
+  setTimeout(() => {
+    toastStore.setStatus(false, "", "");
+  }, 10000);
+};
+
+const activeTab = ref<"tab1" | "tab2">("tab1");
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -41,6 +55,9 @@ const signUpHandler = () => {
   if (!validateSignUp(credentialsSignUp, errorsSignUp)) return;
 
   postSignUpData(credentialsSignUp);
+
+  setToastStore(true, "Registrering", "Du skapade ett nytt konto");
+  activeTab.value = "tab1";
 };
 
 const signInHandler = async () => {
@@ -67,6 +84,8 @@ const signInHandler = async () => {
     userStore.setUser(credentialsUser);
     localStorage.setItem("token", response.token);
     router.push("/");
+
+    setToastStore(true, "Inloggning", "Du loggade in, välkommen " + response.user.name + "!");
   } catch (err) {
     console.error("Inloggningen misslyckades: ", err);
   }
@@ -74,7 +93,7 @@ const signInHandler = async () => {
 </script>
 
 <template>
-  <TabsRoot class="tabsRoot" default-value="tab1">
+  <TabsRoot v-model="activeTab" class="tabsRoot">
     <TabsList class="tabsList" aria-label="Manage your account">
       <TabsIndicator class="tagsIndicator">
         <div style="width: 100%; height: 100%" class="tabsIndicator" />
@@ -124,6 +143,7 @@ const signInHandler = async () => {
       </form>
     </TabsContent>
   </TabsRoot>
+  <Toast />
 </template>
 
 <style scoped>

@@ -12,7 +12,9 @@ import {
   DialogClose,
 } from "radix-vue";
 import { logoutAccount, deleteUserAccount } from "./services/authService";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const userStore = useUserStore();
 const firstName = userStore.name.split(" ")[0];
 
@@ -23,6 +25,10 @@ const logout = () => {
 const deleteAccount = (userId: number) => {
   deleteUserAccount(userId);
   logout();
+};
+
+const returnToIndex = () => {
+  router.push("/");
 };
 </script>
 
@@ -40,6 +46,7 @@ const deleteAccount = (userId: number) => {
 
     <p>Välkommen {{ firstName }}.</p>
 
+    <button v-on:click="returnToIndex()">Tillbaka</button>
     <button>Darkmode (på)</button>
     <button @click="logout()">Logga ut</button>
 

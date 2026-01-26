@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { AvatarRoot, AvatarFallback, AvatarImage } from "radix-vue";
 import { useUserStore } from "../store/user";
+import { useRouter } from "vue-router";
 const userStore = useUserStore();
+const router = useRouter();
+
+const openSettings = () => {
+  router.push("/settings");
+};
 </script>
 
 <template>
@@ -18,6 +24,7 @@ const userStore = useUserStore();
     <div class="chatProfileStatusDiv">
       <p class="chatProfileStatusText">{{ userStore.status ? "Tillgänlig" : "Otillgänlig" }}</p>
       <a class="chatProfileStatus" :class="userStore.status ? 'statusOn' : 'statusOff'"></a>
+      <button v-on:click="openSettings" class="pi pi-cog settingsIcon"></button>
     </div>
   </div>
 </template>
@@ -103,6 +110,20 @@ const userStore = useUserStore();
 .chatProfileStatusText {
   color: var(--color-heading);
   padding: 0 0.5rem 0 0.5rem;
+}
+
+.settingsIcon {
+  color: var(--color-heading);
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding-left: 1rem;
+  font-size: 1.25rem;
+}
+
+.settingsIcon:hover {
+  pointer-events: all;
+  cursor: pointer;
 }
 
 @media (min-width: 1024px) {
