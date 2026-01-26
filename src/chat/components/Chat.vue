@@ -92,7 +92,7 @@ onMounted(() => {
         v-on:keyup.enter="messageEnter"
         required
       />
-      <i class="pi pi-send sendIcon" aria-hidden="true"></i>
+      <button class="pi pi-send sendIcon" v-on:click="messageEnter"></button>
     </div>
   </div>
 
@@ -167,5 +167,14 @@ h2 {
   font-size: 0.8rem;
   position: relative;
   right: 2rem;
+  padding: 0;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  pointer-events: all;
+}
+
+.sendIcon:hover {
+  cursor: pointer;
 }
 </style>
