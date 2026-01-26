@@ -1,47 +1,47 @@
 # Chat Application exam project - Nils & Magnus
 
-## Project Setup
+## How to run the Project
+
+# Requirements
+
+```sh
+Docker
+Node.js
+
+2 browser options (Chrome, firefox for example)
+```
+
+```sh
+Database manager (heidisql example) - If you want to manage the database for the app (not required)
+```
+
+# Install dependencies
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+# Running the application
 
 ```sh
+Make sure that docker is up an running on your computer before using -
 npm run dev
+
+after the application should be running locally on your computer. 
 ```
 
-### Type-Check, Compile and Minify for Production
+# In the application
 
-```sh
-npm run build
 ```
+Create a account using the register form when entering the website
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+When creating 1 account on one browser and one on another they will get the id's 1 & 2 and continue in that order when creating more accounts.
 
-```sh
-npm run test:unit
-```
+Login on both browsers using the accounts you've created.
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+In bottom left of the application create a chat with the other account-ID from which you are using.
 
-```sh
-npm run test:e2e:dev
-```
+See how the conversation is being created and try chatting to yourself between your accounts on the 2 diffrent browsers.
 
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
+When you feel done, enter the settings tab from the cogwheel icon next to your profile to delete your accounts (if you feel so). 
 ```
