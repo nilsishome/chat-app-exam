@@ -182,6 +182,34 @@ button:hover {
   color: var(--color-background);
 }
 
+.AvatarRoot {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  background-color: var(--color-background-soft);
+}
+
+.AvatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.AvatarFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: inherit;
+  color: var(--color-background);
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 500;
+}
+
 @media (max-width: 400px) {
   .AvatarRoot,
   .AvatarImage,
