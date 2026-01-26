@@ -21,6 +21,20 @@ Database manager (heidisql example) - If you want to manage the database for the
 npm install
 ```
 
+#.env
+
+```
+create a .env file in src directory and add following content.
+
+POSTGRES_HOST="localhost"
+POSTGRES_PORT=5432
+POSTGRES_USER="myuser"
+POSTGRES_PASSWORD="mypassword"
+POSTGRES_NAME="mydb"
+
+DATABASE_URL=${POSTGRES_HOST}://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/${POSTGRES_NAME}
+```
+
 # Running the application
 
 ```sh
