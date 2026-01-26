@@ -1,11 +1,5 @@
-import {
-  createChat,
-  getAllUserConversations,
-  getConversation,
-  getUnknownUserFromConversation,
-} from "./sql/createChat.ts";
+import { createChat, getConversation, getUnknownUserFromConversation } from "./sql/createChat.ts";
 import { sendMessage } from "./sql/messages.ts";
-import { io } from "./server.ts";
 import { Server, Socket } from "socket.io";
 
 export const registerChatSockets = (io: Server) => {

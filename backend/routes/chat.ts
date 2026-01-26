@@ -1,9 +1,5 @@
 import express from "express";
-import {
-  createChat,
-  getAllUserConversations,
-  getUnknownUserFromConversation,
-} from "../sql/createChat";
+import { getAllUserConversations, getUnknownUserFromConversation } from "../sql/createChat";
 import { Request, Response } from "express";
 import { sendMessage } from "../sql/messages";
 
