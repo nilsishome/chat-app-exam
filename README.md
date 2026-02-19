@@ -1,5 +1,8 @@
 # Chat Application exam project - Nils & Magnus
 
+<img width="1916" height="1049" alt="Screenshot from 2026-02-19 14-38-16" src="https://github.com/user-attachments/assets/101ff7cb-409d-4d6b-957a-dc212c92d2f0" />
+
+
 ## How to run the Project
 
 # Requirements
